@@ -35,7 +35,7 @@ test('route jersey numbers must be 0-99 (0 is the admin test record)', () => {
 });
 
 test('email notifications stay disabled without SMTP settings', async () => {
-  const notifier = createNotifier({ NOTIFY_EMAIL: 'iluito@binus.edu' });
+  const notifier = createNotifier({ NOTIFY_EMAIL: 'ilukito@binus.edu' });
   assert.equal(notifier.enabled, false);
   await notifier.submission({});
 });
