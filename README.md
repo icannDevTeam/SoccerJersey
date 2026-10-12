@@ -57,7 +57,7 @@ When `SMTP_HOST` is set, each new submission emails `NOTIFY_EMAIL` (default reci
    - `FIREBASE_SERVICE_ACCOUNT`: the service account key, base64 encoded:
      `base64 -w0 your-firebase-adminsdk-key.json`
    - `PUBLIC_URL`: the deployed address, e.g. `https://soccer-jersey.vercel.app`
-   - Optional email: `NOTIFY_EMAIL`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, `MAIL_FROM`
+   - Optional email: `NOTIFY_EMAIL`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`
 3. Deploy. All routes go to `api/index.js`, which runs `server.js` as a serverless function.
 
 Notes:
