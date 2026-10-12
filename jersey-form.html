@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Junior Soccer | Jersey Form</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --burgundy: #730b2b;
+      --burgundy-dark: #52091f;
+      --gold: #e5bc43;
+      --gold-l: #f4d773;
+      --gold-dim: rgba(229,188,67,0.10);
+      --gold-border: rgba(229,188,67,0.4);
+      --white: #fff;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-700: #374151;
+      --gray-900: #111827;
+      --green: #278552;
+      --red: #b42318;
+      --rad: 12px;
+      --rad-lg: 18px;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      background: #f5f3f1;
+      padding: 64px 32px 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 1120px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--rad-lg);
+      overflow: hidden;
+      box-shadow: 0 16px 48px rgba(40,20,25,0.06);
+    }
+
+    .intro {
+      background: #faf8f4;
+      padding: 28px;
+      border-right: 1px solid var(--gray-200);
+    }
+
+    .hd {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding: 28px 36px;
+      background: var(--burgundy);
+      border-top: 5px solid var(--gold);
+    }
+
+    .logo {
+      display: block;
+      width: 88px;
+      height: 88px;
+      flex-shrink: 0;
+      object-fit: contain;
+      background: var(--white);
+      border-radius: 8px;
+    }
+
+    .school {
+      color: var(--gold-l);
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .hd h1 {
+      font-size: clamp(26px, 3vw, 36px);
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+      letter-spacing: -0.8px;
+      margin-bottom: 8px;
+    }
+
+    .hd p {
+      color: rgba(255,255,255,0.8);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    /* ───── Advisory Banner ───── */
+    .advisory {
+      display: flex;
+      align-items: flex-start;
+      background: var(--gold-dim);
+      border: 1px solid var(--gold-border);
+      border-left: 4px solid var(--gold);
+      border-radius: var(--rad);
+      padding: 13px 16px;
+      margin-bottom: 20px;
+    }
+
+    .advisory-body {
+      flex: 1;
+    }
+
+    .advisory-body .tag {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--burgundy);
+      margin-bottom: 8px;
+    }
+
+    .advisory-body p {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gray-700);
+      line-height: 1.55;
+    }
+
+    .advisory-body p strong {
+      color: var(--burgundy);
+      font-weight: 700;
+    }
+
+    .size-chart {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .size-chart h2 {
+      color: var(--gray-900);
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .size-chart img, .chart-dialog img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .size-chart figcaption {
+      color: var(--gray-500);
+      font-size: 12px;
+      line-height: 1.6;
+      margin-top: 12px;
+    }
+
+    .btn-chart {
+      width: 100%;
+      min-height: 44px;
+      margin-top: 14px;
+      padding: 10px 14px;
+      border: 1px solid var(--gray-300);
+      border-radius: 7px;
+      background: var(--white);
+      color: var(--burgundy);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-chart:hover { background: var(--gray-50); }
+
+    .chart-dialog {
+      width: min(820px, calc(100% - 32px));
+      max-height: calc(100dvh - 32px);
+      margin: auto;
+      padding: 20px;
+      border: 0;
+      border-radius: 12px;
+      overflow-y: auto;
+    }
+
+    .chart-dialog::backdrop { background: rgba(0,0,0,0.6); }
+
+    .chart-dialog-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .chart-dialog-header h2 { font-size: 20px; }
+    .chart-dialog-header .btn-chart { width: auto; margin: 0; }
+
+    /* ───── Card ───── */
+    .card {
+      background: #fff;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .card-top-bar {
+      display: none;
+    }
+
+    .card-body {
+      padding: 44px 40px 40px;
+    }
+
+    .card-heading { margin-bottom: 28px; }
+    .card-heading h2 {
+      color: var(--gray-900);
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .card-heading p {
+      font-size: 13px;
+      color: var(--gray-500);
+      line-height: 1.6;
+    }
+
+    /* ───── Form ───── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 24px 20px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      grid-column: 1 / -1;
+      gap: 20px;
+    }
+
+    .fg { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+
+    .fg label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-700);
+      letter-spacing: 0.15px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .req { color: var(--red); font-size: 13px; line-height: 1; margin-left: 1px; }
+    .optional { color: var(--gray-500); font-size: 12px; font-weight: 400; }
+
+    .fg input,
+    .fg select {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid var(--gray-300);
+      border-radius: 7px;
+      font-size: 16px;
+      font-family: inherit;
+      color: var(--gray-900);
+      background: var(--gray-50);
+      transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .fg select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+
+    .fg input:focus,
+    .fg select:focus {
+      border-color: var(--burgundy);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(115,11,43,0.12);
+    }
+
+    .fg input:hover:not(:focus),
+    .fg select:hover:not(:focus) {
+      border-color: var(--gray-300);
+    }
+
+    .fg input::placeholder { color: var(--gray-500); font-weight: 400; }
+
+    /* Remove number spinners */
+    input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+    /* Hint */
+    .hint {
+      font-size: 11.5px;
+      color: var(--gray-500);
+      margin-top: 1px;
+    }
+
+    .size-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      color: var(--burgundy);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .size-note svg {
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* Error state */
+    .fg.err input,
+    .fg.err select {
+      border-color: var(--red);
+      background: #fef2f2;
+    }
+
+    .fg.err input:focus,
+    .fg.err select:focus {
+      box-shadow: 0 0 0 3px rgba(239,68,68,0.12);
+    }
+
+    .err-msg {
+      font-size: 11.5px;
+      color: var(--red);
+      display: none;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .fg.err .err-msg { display: flex; }
+
+    /* Valid state */
+    .fg.ok input,
+    .fg.ok select {
+      border-color: var(--green);
+    }
+
+    /* Divider */
+    .divider {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-700);
+    }
+
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--gray-200);
+    }
+
+    /* Submit */
+    .btn-submit {
+      grid-column: 1 / -1;
+      width: 100%;
+      padding: 14px 20px;
+      background: var(--burgundy);
+      color: #fff;
+      font-size: 15.5px;
+      font-weight: 700;
+      font-family: inherit;
+      letter-spacing: 0.2px;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s;
+      margin-top: 4px;
+    }
+
+    .btn-submit:hover {
+      background: var(--burgundy-dark);
+    }
+
+    .btn-submit:active {
+      background: var(--burgundy-dark);
+    }
+
+    .btn-submit:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    /* ───── Progress and review steps ───── */
+    .stepper {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      list-style: none;
+      margin-bottom: 32px;
+      counter-reset: step;
+    }
+    .stepper li {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--gray-500);
+      font-size: 13px;
+      font-weight: 500;
+      text-align: center;
+    }
+    .stepper li::before {
+      counter-increment: step;
+      content: counter(step);
+      position: relative;
+      z-index: 1;
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 2px solid var(--gray-300);
+      font-weight: 700;
+      transition: background .2s, border-color .2s;
+    }
+    .stepper li + li::after {
+      content: '';
+      position: absolute;
+      top: 16px;
+      right: 50%;
+      width: 100%;
+      height: 3px;
+      background: var(--gray-200);
+      transition: background .2s;
+    }
+    .stepper li.done::before { content: '\2713'; background: var(--green); border-color: var(--green); color: var(--white); }
+    .stepper li.done::after, .stepper li.current::after { background: var(--green); }
+    .stepper li.current { color: var(--burgundy); font-weight: 700; }
+    .stepper li.current::before { background: var(--burgundy); border-color: var(--burgundy); color: var(--white); box-shadow: 0 0 0 4px var(--gold-dim); }
+
+    .step-panel[hidden] { display: none; }
+    .step-panel:focus { outline: none; }
+
+    .review-layout {
+      display: grid;
+      grid-template-columns: 190px minmax(0, 1fr);
+      gap: 28px;
+      align-items: start;
+    }
+    .jersey-preview { position: relative; text-align: center; }
+    .jersey-preview svg { display: block; width: 100%; height: auto; }
+    .jersey-preview .print {
+      position: absolute;
+      top: 26%;
+      left: 22%;
+      right: 22%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--white);
+      font-weight: 800;
+      line-height: 1;
+    }
+    .print-name { max-width: 100%; font-size: 12px; letter-spacing: 1px; overflow-wrap: anywhere; }
+    .print-number { font-size: 54px; color: var(--gold-l); }
+    .preview-caption { color: var(--gray-500); font-size: 12px; margin-top: 8px; }
+
+    .review-list { border: 1px solid var(--gray-200); border-radius: 10px; overflow: hidden; }
+    .review-row {
+      display: grid;
+      grid-template-columns: 130px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--gray-200);
+      font-size: 14px;
+    }
+    .review-row:nth-child(even) { background: var(--gray-50); }
+    .review-row:last-child { border-bottom: 0; }
+    .review-row dt { color: var(--gray-500); }
+    .review-row dd { color: var(--gray-900); font-weight: 700; overflow-wrap: anywhere; }
+    .btn-link {
+      color: var(--burgundy);
+      background: none;
+      border: 0;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .review-warning {
+      margin: 20px 0;
+      padding: 12px 14px;
+      border-left: 4px solid var(--gold);
+      background: var(--gold-dim);
+      color: var(--gray-700);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .review-actions {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 12px;
+    }
+    .review-actions .btn-submit { margin-top: 0; grid-column: auto; }
+    .btn-secondary {
+      padding: 14px 22px;
+      border: 1px solid var(--gray-300);
+      border-radius: 7px;
+      background: var(--white);
+      color: var(--gray-700);
+      font: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-secondary:hover { background: var(--gray-50); }
+
+    .success { text-align: center; }
+    .success-icon {
+      display: grid;
+      place-items: center;
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 16px;
+      border-radius: 50%;
+      background: var(--green);
+      color: var(--white);
+    }
+    .success h2 { font-size: 24px; color: var(--gray-900); margin-bottom: 8px; }
+    .success > p { color: var(--gray-500); font-size: 14px; line-height: 1.6; margin: 0 auto 24px; max-width: 460px; }
+    .success .review-list { text-align: left; margin-bottom: 24px; }
+    .success .review-row { grid-template-columns: 130px minmax(0, 1fr); }
+    .form-status {
+      grid-column: 1 / -1;
+      color: var(--red);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .form-status:empty { display: none; }
+    .number-status { color: var(--gray-500); font-size: 12px; line-height: 1.5; }
+    .btn-retry {
+      align-self: flex-start;
+      color: var(--burgundy);
+      background: transparent;
+      border: 0;
+      text-decoration: underline;
+      font: inherit;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .btn-submit svg { flex-shrink: 0; }
+
+    /* Footer */
+    .foot {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 18px 24px;
+      border-top: 1px solid var(--gray-200);
+      color: var(--gray-500);
+      font-size: 12px;
+    }
+
+    a:focus-visible, button:focus-visible {
+      outline: 3px solid var(--green);
+      outline-offset: 4px;
+    }
+
+    @media (max-width: 900px) {
+      body { padding: 32px 24px; }
+      .wrap { grid-template-columns: 1fr; max-width: 680px; }
+      .intro { padding: 24px 32px; border-right: 0; border-bottom: 1px solid var(--gray-200); }
+      .hd { padding: 28px 32px; }
+      .card-body { padding: 32px; }
+      .size-note svg { transform: rotate(90deg); }
+    }
+
+    @media (max-width: 540px) {
+      body { padding: 16px 12px; }
+      .intro, .card-body, .hd { padding: 24px; }
+      .hd { align-items: flex-start; flex-direction: column; gap: 16px; }
+      .logo { width: 72px; height: 72px; }
+      .size-chart { padding: 12px; }
+      .form-grid, .form-row { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+      .hd h1 { font-size: 30px; }
+      .stepper li { font-size: 12px; }
+      .review-layout { grid-template-columns: 1fr; gap: 20px; }
+      .jersey-preview { width: 170px; margin: 0 auto; }
+      .review-row { grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; }
+      .review-row dt { grid-column: 1 / -1; font-size: 12px; }
+      .success .review-row { grid-template-columns: 1fr; }
+      .review-actions { grid-template-columns: 1fr; }
+      .review-actions .btn-secondary { order: 2; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <header class="hd">
+        <img class="logo" src="images/logo.jpe" alt="BINUS School Simprug" width="120" height="120" />
+        <div>
+        <div class="school">BINUS School Simprug</div>
+        <h1>Junior Soccer Jersey Form</h1>
+        <p>Enter your details, choose your sizes, and confirm the name and number for your jersey.</p>
+        </div>
+    </header>
+
+    <aside class="intro" aria-labelledby="size-chart-title">
+      <div class="advisory">
+        <div class="advisory-body">
+          <span class="tag">Choosing your size</span>
+          <p>We recommend choosing at least <strong>one size larger</strong> than your measurements.</p>
+        </div>
+      </div>
+      <figure class="size-chart">
+        <h2 id="size-chart-title">Size chart</h2>
+        <img src="images/size_chart.png"
+          alt="Children's jersey and pants size chart, sizes S to 3XL. Panjang means length, Lebar means width, and Lebar Kaki means leg width. Measurements are in centimeters."
+          width="791" height="990" />
+        <figcaption>Measurements in cm. Panjang = length; Lebar = width. Allow a 1–2 cm measurement tolerance.</figcaption>
+        <button type="button" class="btn-chart" id="enlargeChart">Enlarge size chart</button>
+      </figure>
+    </aside>
+
+    <main class="card">
+      <div class="card-top-bar"></div>
+      <div class="card-body">
+        <ol class="stepper" aria-label="Form progress">
+          <li data-step="1">Fill in details</li>
+          <li data-step="2">Review</li>
+          <li data-step="3">Submitted</li>
+        </ol>
+
+        <section class="step-panel" id="step-1" aria-labelledby="details-heading" tabindex="-1">
+        <div class="card-heading">
+          <h2 id="details-heading">Jersey details</h2>
+          <p>Fields marked <span class="req">*</span> are required. You can check everything on the next page before submitting.</p>
+        </div>
+        <form id="jerseyForm" novalidate>
+          <div class="form-grid">
+
+            <!-- Student Name -->
+            <div class="fg" id="fg-name">
+              <label for="studentName">
+                Student name <span class="req">*</span>
+              </label>
+              <input type="text" id="studentName" name="studentName"
+                placeholder="Enter full name"
+                autocomplete="name" autocapitalize="words" maxlength="120" required />
+              <span class="err-msg" id="e-name">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Please enter the student's full name
+              </span>
+            </div>
+
+            <!-- Class -->
+            <div class="fg" id="fg-class">
+              <label for="classSelect">
+                Class <span class="optional">(optional)</span>
+              </label>
+              <select id="classSelect" name="class">
+                <option value="">Not selected</option>
+                <option value="4">Class 4</option>
+                <option value="5">Class 5</option>
+                <option value="6">Class 6</option>
+              </select>
+            </div>
+
+            <div class="divider">Sizing</div>
+
+            <!-- Jersey & Pants Size -->
+            <div class="form-row">
+              <div class="fg" id="fg-jsize">
+                <label for="jerseySize">
+                  Jersey size <span class="req">*</span>
+                </label>
+                <select id="jerseySize" name="jerseySize" required aria-describedby="jersey-size-note e-jsize">
+                  <option value="">Select size</option>
+                  <option value="S">S</option>
+                  <option value="M">M</option>
+                  <option value="L">L</option>
+                  <option value="XL">XL</option>
+                  <option value="2XL">2XL</option>
+                  <option value="3XL">3XL</option>
+                </select>
+                <span class="size-note" id="jersey-size-note">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M19 12H5m7-7-7 7 7 7"/>
+                  </svg>
+                  Please refer to the size chart before choosing your size.
+                </span>
+                <span class="err-msg" id="e-jsize">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  Required
+                </span>
+              </div>
+
+              <div class="fg" id="fg-psize">
+                <label for="pantsSize">
+                  Pants size <span class="req">*</span>
+                </label>
+                <select id="pantsSize" name="pantsSize" required>
+                  <option value="">Select size</option>
+                  <option value="S">S</option>
+                  <option value="M">M</option>
+                  <option value="L">L</option>
+                  <option value="XL">XL</option>
+                  <option value="2XL">2XL</option>
+                  <option value="3XL">3XL</option>
+                </select>
+                <span class="err-msg" id="e-psize">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  Required
+                </span>
+              </div>
+            </div>
+
+            <div class="divider">Jersey print</div>
+
+            <!-- Nickname -->
+            <div class="fg" id="fg-nick">
+              <label for="nickname">
+                Printed name <span class="req">*</span>
+              </label>
+              <input type="text" id="nickname" name="nickname"
+                placeholder="Name to print on jersey"
+                maxlength="14" autocapitalize="characters" required />
+              <span class="hint" id="nick-count">Max 14 characters</span>
+              <span class="err-msg" id="e-nick">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Please enter a printed name
+              </span>
+            </div>
+
+            <!-- Jersey Number -->
+            <div class="fg" id="fg-num">
+              <label for="jerseyNum">
+                Jersey number <span class="req">*</span>
+              </label>
+              <select id="jerseyNum" name="jerseyNumber" required disabled aria-describedby="number-hint number-status e-num">
+                <option value="">Select number</option>
+              </select>
+              <span class="hint" id="number-hint">Taken numbers cannot be selected. Your number is reserved when you submit.</span>
+              <span class="number-status" id="number-status" role="status">Loading available numbers...</span>
+              <button type="button" class="btn-retry" id="refreshNumbers">Refresh numbers</button>
+              <span class="err-msg" id="e-num">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Please select a jersey number
+              </span>
+            </div>
+
+            <!-- Submit -->
+            <p class="form-status" id="form-status" role="alert"></p>
+            <button type="submit" class="btn-submit" disabled>
+              Review details
+            </button>
+
+          </div>
+        </form>
+        </section>
+
+        <section class="step-panel" id="step-2" aria-labelledby="review-heading" tabindex="-1" hidden>
+          <div class="card-heading">
+            <h2 id="review-heading">Review your details</h2>
+            <p>Please check every detail carefully. Select Edit to correct anything.</p>
+          </div>
+          <div class="review-layout">
+            <figure class="jersey-preview" aria-label="Jersey back preview">
+              <svg viewBox="0 0 200 220" aria-hidden="true">
+                <path d="M62 10 L20 30 L0 80 L32 94 L42 70 L42 210 L158 210 L158 70 L168 94 L200 80 L180 30 L138 10 C128 24 72 24 62 10 Z" fill="#730b2b" stroke="#52091f" stroke-width="3"/>
+                <path d="M62 10 C72 24 128 24 138 10" fill="none" stroke="#e5bc43" stroke-width="5"/>
+              </svg>
+              <div class="print">
+                <span class="print-name" id="preview-name"></span>
+                <span class="print-number" id="preview-number"></span>
+              </div>
+              <figcaption class="preview-caption">Back of jersey</figcaption>
+            </figure>
+            <div>
+              <dl class="review-list" id="review-list"></dl>
+              <p class="review-warning">Check the spelling of the student name and printed name. The printed name will appear on the jersey exactly as shown.</p>
+              <p class="form-status" id="review-status" role="alert"></p>
+              <div class="review-actions">
+                <button type="button" class="btn-secondary" id="backToEdit">Back to edit</button>
+                <button type="button" class="btn-submit" id="confirmSubmit">Confirm and submit</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="step-panel success" id="step-3" aria-labelledby="success-heading" tabindex="-1" hidden>
+          <div class="success-icon" aria-hidden="true">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <h2 id="success-heading">Submission received</h2>
+          <p>Jersey number <strong id="success-number"></strong> is now reserved. If a detail needs to be corrected, please contact Mr. Ivan.</p>
+          <dl class="review-list" id="success-list"></dl>
+          <button type="button" class="btn-secondary" id="startAgain">Submit another student</button>
+        </section>
+      </div>
+    </main>
+
+    <div class="foot">Junior Soccer Program &bull; BINUS School Simprug</div>
+  </div>
+
+  <dialog class="chart-dialog" id="chartDialog" aria-labelledby="chart-dialog-title">
+    <div class="chart-dialog-header">
+      <h2 id="chart-dialog-title">Size chart</h2>
+      <button type="button" class="btn-chart" id="closeChart">Close</button>
+    </div>
+    <img src="images/size_chart.png"
+      alt="Children's jersey and pants size chart with measurements in centimeters, sizes S to 3XL."
+      width="791" height="990" />
+  </dialog>
+
+  <script>
+    const jerseyNumberSelect = document.getElementById('jerseyNum');
+    jerseyNumberSelect.append(...Array.from({ length: 99 }, (_, index) => {
+      const number = String(index + 1);
+      return new Option(number, number);
+    }));
+
+    const form = document.getElementById('jerseyForm');
+    const submitButton = form.querySelector('.btn-submit');
+    const formStatus = document.getElementById('form-status');
+    const reviewStatus = document.getElementById('review-status');
+    const confirmButton = document.getElementById('confirmSubmit');
+    const numberStatus = document.getElementById('number-status');
+    let numbersReady = false;
+    let refreshing = false;
+    let submitting = false;
+    let pendingSubmission = null;
+    let reviewDetails = null;
+    let currentStep = 1;
+
+    async function refreshNumbers() {
+      if (refreshing || submitting) return;
+      if (pendingSubmission) {
+        numberStatus.textContent = 'Your previous submission is unconfirmed. Retry Confirm and submit with the same details to confirm it.';
+        return;
+      }
+      refreshing = true;
+      document.getElementById('refreshNumbers').disabled = true;
+      try {
+        const response = await fetch('/api/numbers', { cache: 'no-store', signal: AbortSignal.timeout(15000) });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Unable to load available numbers.');
+        if (!Array.isArray(data.takenNumbers) ||
+            data.takenNumbers.some(number => !Number.isInteger(number) || number < 1 || number > 99)) {
+          throw new Error('Invalid availability response. Please refresh the numbers.');
+        }
+        if (submitting || pendingSubmission) return;
+        const taken = new Set(data.takenNumbers);
+        for (const option of jerseyNumberSelect.options) {
+          if (!option.value) continue;
+          option.disabled = taken.has(Number(option.value));
+          option.textContent = `${option.value}${option.disabled ? ' — Taken' : ''}`;
+        }
+        if (currentStep !== 3 && taken.has(Number(jerseyNumberSelect.value))) {
+          jerseyNumberSelect.value = '';
+          mark('fg-num', true);
+          formStatus.textContent = 'Your selected number has just been taken. Please choose another number.';
+          if (currentStep === 2) goToStep(1, 'jerseyNum');
+        }
+        numbersReady = taken.size < 99;
+        numberStatus.textContent = numbersReady
+          ? `${99 - taken.size} numbers available.`
+          : 'All jersey numbers have been reserved. Please contact the organizer.';
+      } catch (error) {
+        numbersReady = false;
+        numberStatus.textContent = `Unable to check availability. ${error.message} Use Refresh numbers to retry.`;
+      } finally {
+        refreshing = false;
+        jerseyNumberSelect.disabled = !numbersReady;
+        submitButton.disabled = submitting || !numbersReady;
+        document.getElementById('refreshNumbers').disabled = false;
+      }
+    }
+
+    document.getElementById('refreshNumbers').addEventListener('click', refreshNumbers);
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) refreshNumbers();
+    });
+    setInterval(() => {
+      if (!document.hidden) refreshNumbers();
+    }, 15000);
+
+    const chartDialog = document.getElementById('chartDialog');
+    document.getElementById('enlargeChart').addEventListener('click', () => chartDialog.showModal());
+    document.getElementById('closeChart').addEventListener('click', () => chartDialog.close());
+    chartDialog.addEventListener('keydown', event => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        chartDialog.close();
+      }
+    });
+
+    // ── Nickname character counter ──────────────────────────────
+    const nickInput = document.getElementById('nickname');
+    const nickCount = document.getElementById('nick-count');
+
+    nickInput.addEventListener('input', function () {
+      const len = this.value.length;
+      nickCount.textContent = `${len}/14 characters`;
+      nickCount.style.color = len >= 13 ? '#8a6000' : '';
+    });
+
+    nickInput.addEventListener('blur', function () {
+      this.value = this.value.toUpperCase().trim();
+    });
+
+    // ── Validation helpers ──────────────────────────────────────
+    function mark(id, hasError) {
+      const el = document.getElementById(id);
+      el.classList.toggle('err', hasError);
+      el.classList.toggle('ok', !hasError && hasValue(id));
+      el.querySelector('input, select').setAttribute('aria-invalid', String(hasError));
+    }
+
+    function hasValue(fgId) {
+      const inp = document.querySelector(`#${fgId} input, #${fgId} select`);
+      return inp && inp.value.trim() !== '';
+    }
+
+    function val(id) {
+      return document.getElementById(id).value.trim();
+    }
+
+    function numOk(v) {
+      const n = Number(v);
+      const option = Array.from(jerseyNumberSelect.options).find(item => item.value === v);
+      return v !== '' && Number.isInteger(n) && n >= 1 && n <= 99 && option && !option.disabled;
+    }
+
+    // ── Live blur validation ───────────────────────────────────
+    document.getElementById('studentName').addEventListener('blur', () => mark('fg-name', !val('studentName')));
+    document.getElementById('classSelect').addEventListener('change', () => mark('fg-class', false));
+    document.getElementById('jerseySize').addEventListener('change', () => mark('fg-jsize', !val('jerseySize')));
+    document.getElementById('pantsSize').addEventListener('change', () => mark('fg-psize', !val('pantsSize')));
+    document.getElementById('nickname').addEventListener('blur', () => mark('fg-nick', !val('nickname')));
+    jerseyNumberSelect.addEventListener('change', () => mark('fg-num', !numOk(val('jerseyNum'))));
+
+    // ── Steps ──────────────────────────────────────────────────
+    function goToStep(step, focusId) {
+      currentStep = step;
+      document.querySelectorAll('.step-panel').forEach(panel => {
+        panel.hidden = panel.id !== `step-${step}`;
+      });
+      document.querySelectorAll('.stepper li').forEach(item => {
+        const itemStep = Number(item.dataset.step);
+        item.classList.toggle('done', itemStep < step || step === 3);
+        item.classList.toggle('current', itemStep === step && step !== 3);
+        if (itemStep === step) item.setAttribute('aria-current', 'step');
+        else item.removeAttribute('aria-current');
+      });
+      document.querySelector('.card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.getElementById(focusId || `step-${step}`).focus({ preventScroll: true });
+    }
+
+    const reviewFields = [
+      ['studentName', 'Student name', details => details.studentName],
+      ['classSelect', 'Class', details => details.class ? `Class ${details.class}` : 'Not provided'],
+      ['jerseySize', 'Jersey size', details => details.jerseySize],
+      ['pantsSize', 'Pants size', details => details.pantsSize],
+      ['nickname', 'Printed name', details => details.nickname],
+      ['jerseyNum', 'Jersey number', details => `#${details.jerseyNumber}`],
+    ];
+
+    function renderDetails(list, details, editable) {
+      list.replaceChildren(...reviewFields.map(([fieldId, label, value]) => {
+        const row = document.createElement('div');
+        row.className = 'review-row';
+        const term = document.createElement('dt');
+        term.textContent = label;
+        const description = document.createElement('dd');
+        description.textContent = value(details);
+        row.append(term, description);
+        if (editable) {
+          const edit = document.createElement('button');
+          edit.type = 'button';
+          edit.className = 'btn-link';
+          edit.textContent = 'Edit';
+          edit.setAttribute('aria-label', `Edit ${label.toLowerCase()}`);
+          edit.addEventListener('click', () => goToStep(1, fieldId));
+          row.append(edit);
+        }
+        return row;
+      }));
+    }
+
+    // ── Step 1: validate and review ────────────────────────────
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (submitting) return;
+      formStatus.textContent = '';
+      if (!numbersReady) {
+        formStatus.textContent = 'Please refresh available numbers before continuing.';
+        return;
+      }
+
+      const checks = [
+        ['fg-name',  !val('studentName')],
+        ['fg-jsize', !val('jerseySize')],
+        ['fg-psize', !val('pantsSize')],
+        ['fg-nick',  !val('nickname')],
+        ['fg-num',   !numOk(val('jerseyNum'))],
+      ];
+
+      let ok = true;
+      checks.forEach(([id, bad]) => { mark(id, bad); if (bad) ok = false; });
+
+      if (!ok) {
+        const first = document.querySelector('.fg.err');
+        if (first) {
+          first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          first.querySelector('input, select').focus({ preventScroll: true });
+        }
+        return;
+      }
+
+      reviewDetails = {
+        studentName: val('studentName').replace(/\s+/g, ' '), class: val('classSelect'),
+        jerseySize: val('jerseySize'), pantsSize: val('pantsSize'),
+        nickname: val('nickname').toUpperCase(), jerseyNumber: Number(val('jerseyNum')),
+      };
+      nickInput.value = reviewDetails.nickname;
+      renderDetails(document.getElementById('review-list'), reviewDetails, true);
+      document.getElementById('preview-name').textContent = reviewDetails.nickname;
+      document.getElementById('preview-number').textContent = reviewDetails.jerseyNumber;
+      reviewStatus.textContent = '';
+      goToStep(2);
+    });
+
+    document.getElementById('backToEdit').addEventListener('click', () => goToStep(1, 'studentName'));
+
+    // ── Step 2: confirm and submit ─────────────────────────────
+    confirmButton.addEventListener('click', async () => {
+      if (submitting || !reviewDetails) return;
+      const details = reviewDetails;
+      const signature = JSON.stringify(details);
+      if (!pendingSubmission || pendingSubmission.signature !== signature) {
+        pendingSubmission = { signature, submissionId: crypto.randomUUID() };
+      }
+      submitting = true;
+      reviewStatus.textContent = '';
+      document.getElementById('step-2').inert = true;
+      confirmButton.textContent = 'Submitting...';
+      let succeeded = false;
+      try {
+        const response = await fetch('/api/submissions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          signal: AbortSignal.timeout(30000),
+          body: JSON.stringify({ ...details, submissionId: pendingSubmission.submissionId }),
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          if (response.status === 409) {
+            pendingSubmission = null;
+            jerseyNumberSelect.value = '';
+            mark('fg-num', true);
+            formStatus.textContent = data.error || 'That jersey number has been taken. Please choose another number.';
+            goToStep(1, 'jerseyNum');
+            return;
+          }
+          throw new Error(data.error || 'Submission failed. Please try again.');
+        }
+        if (data.submissionId !== pendingSubmission.submissionId || data.jerseyNumber !== details.jerseyNumber) {
+          throw new Error('Unable to confirm your submission.');
+        }
+        pendingSubmission = null;
+        succeeded = true;
+        const option = Array.from(jerseyNumberSelect.options).find(item => item.value === String(details.jerseyNumber));
+        option.disabled = true;
+        option.textContent = `${details.jerseyNumber} — Taken`;
+        renderDetails(document.getElementById('success-list'), details, false);
+        document.getElementById('success-number').textContent = `#${details.jerseyNumber}`;
+        goToStep(3);
+      } catch (error) {
+        reviewStatus.textContent = `${error.message} Please select Confirm and submit again without changing your details.`;
+      } finally {
+        submitting = false;
+        document.getElementById('step-2').inert = false;
+        confirmButton.textContent = 'Confirm and submit';
+        if (!succeeded) refreshNumbers();
+      }
+    });
+
+    // ── Step 3: start again ────────────────────────────────────
+    document.getElementById('startAgain').addEventListener('click', () => {
+      form.reset();
+      reviewDetails = null;
+      document.querySelectorAll('.fg').forEach(el => el.classList.remove('err','ok'));
+      document.querySelectorAll('[aria-invalid]').forEach(el => el.removeAttribute('aria-invalid'));
+      nickCount.textContent = 'Max 14 characters';
+      nickCount.style.color = '';
+      formStatus.textContent = '';
+      goToStep(1, 'studentName');
+      refreshNumbers();
+    });
+
+    document.querySelectorAll('.stepper li')[0].classList.add('current');
+    document.querySelectorAll('.stepper li')[0].setAttribute('aria-current', 'step');
+    refreshNumbers();
+  </script>
+</body>
+</html>

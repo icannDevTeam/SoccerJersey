@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Jersey Admin – BINUS School Simprug</title>
+  <style>
+    :root {
+      --burgundy: #730b2b;
+      --burgundy-dark: #52091f;
+      --burgundy-soft: #f8edf0;
+      --gold: #e5bc43;
+      --gold-l: #f4d773;
+      --gold-dim: rgba(229,188,67,0.14);
+      --green: #278552;
+      --green-soft: #e8f4ed;
+      --red: #b42318;
+      --white: #ffffff;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-500: #6b7280;
+      --gray-700: #374151;
+      --gray-900: #111827;
+      --radius: 12px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+      background: #f4f1ee;
+      color: var(--gray-900);
+      min-height: 100vh;
+    }
+    [hidden] { display: none !important; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 2px;
+    }
+
+    /* ───── Login ───── */
+    .login {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: linear-gradient(160deg, var(--burgundy) 0%, var(--burgundy-dark) 100%);
+    }
+    .login-card {
+      width: min(100%, 420px);
+      background: var(--white);
+      border-radius: var(--radius);
+      border-top: 5px solid var(--gold);
+      padding: 40px 36px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.25);
+    }
+    .login-card img { width: 76px; height: 76px; object-fit: contain; display: block; margin: 0 auto 16px; }
+    .login-card h1 { text-align: center; font-size: 22px; }
+    .login-card .sub { text-align: center; color: var(--gray-500); font-size: 14px; margin: 6px 0 28px; }
+    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+    .field label { font-size: 13px; font-weight: 600; color: var(--gray-700); }
+    .field input, .field select {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--gray-300);
+      border-radius: 8px;
+      background: var(--gray-50);
+      color: var(--gray-900);
+      font-size: 15px;
+    }
+    .field input:focus, .field select:focus { border-color: var(--burgundy); background: var(--white); outline: none; box-shadow: 0 0 0 3px var(--gold-dim); }
+    .error-text { color: var(--red); font-size: 13px; min-height: 18px; margin-bottom: 8px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--gray-300);
+      background: var(--white);
+      color: var(--gray-700);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .btn:hover { background: var(--gray-50); }
+    .btn:disabled { opacity: .55; cursor: not-allowed; }
+    .btn-primary { background: var(--burgundy); border-color: var(--burgundy); color: var(--white); }
+    .btn-primary:hover { background: var(--burgundy-dark); }
+    .btn-danger { background: var(--red); border-color: var(--red); color: var(--white); }
+    .btn-danger:hover { background: #8f1c13; }
+    .btn-block { width: 100%; padding: 13px; font-size: 15px; }
+
+    /* ───── Layout ───── */
+    .topbar {
+      background: var(--burgundy);
+      border-bottom: 4px solid var(--gold);
+      color: var(--white);
+    }
+    .topbar-inner, .main { max-width: 1320px; margin: 0 auto; padding: 0 28px; }
+    .topbar-inner { display: flex; align-items: center; gap: 16px; min-height: 76px; }
+    .topbar img { width: 48px; height: 48px; border-radius: 8px; background: var(--white); object-fit: contain; }
+    .brand small { display: block; color: var(--gold-l); font-size: 11px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; }
+    .brand strong { font-size: 18px; }
+    .who { margin-left: auto; text-align: right; font-size: 13px; line-height: 1.4; }
+    .who strong { display: block; font-size: 14px; }
+    .who span { color: rgba(255,255,255,0.75); }
+    .topbar .btn { background: transparent; color: var(--white); border-color: rgba(255,255,255,0.4); }
+    .topbar .btn:hover { background: rgba(255,255,255,0.1); }
+
+    .main { padding-top: 28px; padding-bottom: 48px; }
+    .page-head { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 12px; margin-bottom: 22px; }
+    .page-head h1 { font-size: 26px; }
+    .page-head p { color: var(--gray-500); font-size: 13px; margin-top: 4px; }
+    .page-actions { margin-left: auto; display: flex; flex-wrap: wrap; gap: 8px; }
+    .menu { position: relative; }
+    .menu-list {
+      position: absolute; right: 0; top: calc(100% + 6px); z-index: 5; width: 290px;
+      background: var(--white); border: 1px solid var(--gray-200); border-top: 3px solid var(--gold);
+      border-radius: 10px; box-shadow: 0 14px 34px rgba(17,24,39,0.16); padding: 6px;
+    }
+    .menu-list button { display: block; width: 100%; text-align: left; border: 0; background: none; padding: 10px 12px; border-radius: 7px; font: inherit; color: inherit; }
+    .menu-list button:hover, .menu-list button:focus-visible { background: var(--burgundy-soft); outline: none; }
+    .menu-list b { display: block; font-size: 14px; color: var(--burgundy); }
+    .menu-list span { display: block; font-size: 12px; color: var(--gray-500); margin-top: 2px; }
+    .row-index { color: var(--gray-500); font-size: 13px; width: 1%; }
+
+    .notice {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-left: 4px solid var(--gold);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--gray-700);
+      margin-bottom: 20px;
+    }
+
+    .panel {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      box-shadow: 0 1px 2px rgba(17,24,39,0.04);
+    }
+    .panel h2 { font-size: 15px; margin-bottom: 4px; }
+    .panel .panel-sub { color: var(--gray-500); font-size: 12px; margin-bottom: 16px; }
+
+    .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 20px; }
+    .stat { position: relative; overflow: hidden; }
+    .stat::before { content: ''; position: absolute; inset: 0 auto 0 0; width: 4px; background: var(--burgundy); }
+    .stat:nth-child(2)::before { background: var(--green); }
+    .stat:nth-child(3)::before { background: var(--gold); }
+    .stat:nth-child(4)::before { background: var(--gray-500); }
+    .stat-label { color: var(--gray-500); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .6px; }
+    .stat-value { font-size: 32px; font-weight: 800; margin: 6px 0 2px; color: var(--gray-900); }
+    .stat-value.small { font-size: 17px; margin: 10px 0 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .stat-note { color: var(--gray-500); font-size: 12px; }
+    .progress { height: 6px; border-radius: 6px; background: var(--gray-100); margin-top: 10px; overflow: hidden; }
+    .progress span { display: block; height: 100%; background: var(--green); border-radius: inherit; }
+
+    .charts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-bottom: 20px; }
+    .charts .wide { grid-column: span 2; }
+    .chart-svg { width: 100%; height: auto; display: block; }
+    .chart-svg text { font-size: 14px; fill: var(--gray-500); }
+    .chart-svg .value { fill: var(--gray-900); font-weight: 700; }
+    .bars { display: flex; flex-direction: column; gap: 10px; }
+    .bar-row { display: grid; grid-template-columns: 44px minmax(0, 1fr) 30px; gap: 10px; align-items: center; font-size: 13px; }
+    .bar-row b { color: var(--gray-700); }
+    .bar-track { height: 14px; background: var(--gray-100); border-radius: 7px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: inherit; background: var(--burgundy); transition: width .4s; }
+    .bar-fill.alt { background: var(--gold); }
+    .bar-row span { text-align: right; font-weight: 700; }
+    .donut-wrap { display: flex; align-items: center; gap: 18px; }
+    .donut-wrap { justify-content: center; min-height: 190px; }
+    .donut-wrap svg { width: 170px; height: 170px; flex: none; }
+    .legend { list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 13px; }
+    .legend li { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+    .recent { list-style: none; display: flex; flex-direction: column; }
+    .recent li { display: grid; grid-template-columns: 38px minmax(0, 1fr); gap: 10px; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--gray-100); }
+    .recent li:last-child { border-bottom: 0; }
+    .recent strong { display: block; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .recent .num-badge { min-width: 38px; }
+    .legend i { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+    .legend b { margin-left: auto; padding-left: 10px; }
+
+    .lower { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+    .board { display: grid; grid-template-columns: repeat(20, minmax(0, 1fr)); gap: 6px; }
+    .board button, .board span {
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid var(--gray-200);
+      background: var(--gray-50);
+      color: var(--gray-500);
+    }
+    .board button { background: var(--burgundy); border-color: var(--burgundy); color: var(--white); }
+    .board button:hover { background: var(--burgundy-dark); }
+    .board-legend { display: flex; gap: 16px; font-size: 12px; color: var(--gray-500); margin-top: 12px; }
+
+    .panel-head { display: flex; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+    .panel-head > div:first-child { flex: 1 1 auto; }
+    .seg { display: inline-flex; border: 1px solid var(--gray-300); border-radius: 8px; overflow: hidden; }
+    .seg button { border: 0; background: var(--white); padding: 7px 14px; font-size: 13px; font-weight: 600; color: var(--gray-500); }
+    .seg button + button { border-left: 1px solid var(--gray-300); }
+    .seg button[aria-pressed="true"] { background: var(--burgundy); color: var(--white); }
+    .kit-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+    .kit {
+      border: 1px solid var(--gray-200);
+      border-radius: 10px;
+      background: linear-gradient(180deg, var(--gray-50), var(--white));
+      padding: 12px 10px 10px;
+      text-align: center;
+      font: inherit;
+      color: inherit;
+      transition: border-color .15s, box-shadow .15s, transform .15s;
+    }
+    .kit:hover { border-color: var(--gold); box-shadow: 0 6px 18px rgba(115,11,43,0.12); transform: translateY(-2px); }
+    .kit svg { display: block; width: 100%; max-width: 130px; height: auto; margin: 0 auto 8px; }
+    .kit strong { display: block; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .test-tag { display: inline-block; margin-left: 6px; padding: 1px 6px; border-radius: 4px; background: var(--gold-dim); color: #8a6a10; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; vertical-align: 1px; }
+    .kit .test-tag { display: inline-block; margin-top: 0; color: #8a6a10; font-size: 10px; }
+    .kit span { display: block; font-size: 12px; color: var(--gray-500); margin-top: 2px; }
+    .board-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+
+    .table-tools { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; align-items: center; }
+    .table-tools input, .table-tools select {
+      padding: 9px 12px;
+      border: 1px solid var(--gray-300);
+      border-radius: 8px;
+      background: var(--gray-50);
+      font-size: 14px;
+    }
+    .table-tools input { flex: 1 1 240px; }
+    .table-count { color: var(--gray-500); font-size: 13px; margin-left: auto; }
+    .table-wrap { position: relative; overflow-x: auto; border: 1px solid var(--gray-200); border-radius: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { padding: 11px 14px; text-align: left; border-bottom: 1px solid var(--gray-200); white-space: nowrap; }
+    th { background: var(--gray-50); font-size: 12px; color: var(--gray-500); text-transform: uppercase; letter-spacing: .5px; }
+    th button { background: none; border: 0; color: inherit; font: inherit; letter-spacing: inherit; text-transform: inherit; display: inline-flex; gap: 4px; }
+    th button[aria-sort]::after { content: attr(data-arrow); color: var(--burgundy); }
+    tbody tr:hover { background: #fcf8f9; }
+    tbody tr:last-child td { border-bottom: 0; }
+    td.name { white-space: normal; min-width: 180px; font-weight: 600; }
+    .num-badge {
+      display: inline-grid;
+      place-items: center;
+      min-width: 34px;
+      height: 28px;
+      padding: 0 6px;
+      border-radius: 6px;
+      background: var(--burgundy);
+      color: var(--white);
+      font-weight: 800;
+    }
+    .print-name { font-family: ui-monospace, Consolas, monospace; font-weight: 700; letter-spacing: .5px; }
+    .muted { color: var(--gray-500); font-size: 12px; }
+    .edited { display: inline-block; margin-top: 2px; font-size: 11px; color: var(--green); }
+    .row-actions { display: flex; gap: 6px; }
+    .row-actions .btn { padding: 6px 10px; font-size: 13px; }
+    .link-danger { color: var(--red); }
+    .empty { text-align: center; padding: 40px 16px; color: var(--gray-500); }
+
+    /* ───── Dialogs ───── */
+    dialog {
+      width: min(560px, calc(100% - 32px));
+      border: 0;
+      border-radius: var(--radius);
+      padding: 0;
+      margin: auto;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+    }
+    dialog::backdrop { background: rgba(17,24,39,0.55); }
+    .dialog-head { padding: 18px 22px; border-bottom: 1px solid var(--gray-200); border-top: 4px solid var(--gold); display: flex; align-items: center; }
+    .dialog-head h2 { font-size: 18px; }
+    .dialog-body { padding: 22px; }
+    .dialog-foot { padding: 16px 22px; border-top: 1px solid var(--gray-200); display: flex; justify-content: flex-end; gap: 10px; background: var(--gray-50); }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+    .audit { font-size: 12px; color: var(--gray-500); line-height: 1.6; }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translate(-50%, 20px);
+      background: var(--gray-900);
+      color: var(--white);
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-size: 14px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s, transform .2s;
+      z-index: 10;
+    }
+    .toast.on { opacity: 1; transform: translate(-50%, 0); }
+
+    @media (max-width: 1100px) {
+      .charts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .charts .wide { grid-column: 1 / -1; }
+      .board { grid-template-columns: repeat(15, minmax(0, 1fr)); }
+    }
+    @media (max-width: 760px) {
+      .topbar-inner, .main { padding: 0 16px; }
+      .main { padding-top: 20px; }
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .charts { grid-template-columns: minmax(0, 1fr); }
+      .donut-wrap { flex-wrap: wrap; }
+      .charts .wide { grid-column: auto; }
+      .who { display: none; }
+      .board { grid-template-columns: repeat(10, minmax(0, 1fr)); }
+      .page-actions { margin-left: 0; }
+    }
+    @media (max-width: 420px) {
+      .stats { grid-template-columns: minmax(0, 1fr); }
+      .grid-2 { grid-template-columns: 1fr; }
+      .brand strong { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Login -->
+  <section class="login" id="loginView" hidden>
+    <form class="login-card" id="loginForm" novalidate>
+      <img src="/images/logo.jpe" alt="BINUS School Simprug" />
+      <h1>Jersey Admin</h1>
+      <p class="sub">Junior Soccer Program &middot; BINUS School Simprug</p>
+      <div class="field">
+        <label for="loginEmail">Email</label>
+        <input id="loginEmail" type="email" autocomplete="username" required />
+      </div>
+      <div class="field">
+        <label for="loginPassword">Password</label>
+        <input id="loginPassword" type="password" autocomplete="current-password" required />
+      </div>
+      <p class="error-text" id="loginError" role="alert"></p>
+      <button class="btn btn-primary btn-block" type="submit" id="loginButton">Sign in</button>
+    </form>
+  </section>
+
+  <!-- Dashboard -->
+  <div id="dashView" hidden>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <img src="/images/logo.jpe" alt="" />
+        <div class="brand">
+          <small>BINUS School Simprug</small>
+          <strong>Junior Soccer Jersey Admin</strong>
+        </div>
+        <div class="who">
+          <strong id="adminName"></strong>
+          <span id="adminPosition"></span>
+        </div>
+        <button class="btn" type="button" id="logoutButton">Sign out</button>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="page-head">
+        <div>
+          <h1>Overview</h1>
+          <p id="lastUpdated">Loading submissions...</p>
+        </div>
+        <div class="page-actions">
+          <a class="btn" href="/" target="_blank" rel="noopener">Open student form</a>
+          <button class="btn" type="button" id="refreshButton">Refresh</button>
+          <button class="btn" type="button" id="exportButton">Export CSV</button>
+          <div class="menu" id="reportMenu">
+            <button class="btn btn-primary" type="button" id="reportButton" aria-haspopup="menu" aria-expanded="false">Download report <span aria-hidden="true">&#9662;</span></button>
+            <div class="menu-list" role="menu" hidden>
+              <button type="button" role="menuitem" id="reportPdf"><b>PDF</b><span>Printable report with jersey previews</span></button>
+              <button type="button" role="menuitem" id="reportExcel"><b>Excel (.xlsx)</b><span>Formatted workbook: summary, registrations, number board</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notice" id="emailNotice" hidden>
+        Email notifications are not set up yet. New submissions will appear here; emails to Mr. Ivan will start once SMTP is configured on the server.
+      </div>
+
+      <section class="stats" aria-label="Summary">
+        <div class="panel stat">
+          <div class="stat-label">Total submissions</div>
+          <div class="stat-value" id="statTotal">0</div>
+          <div class="stat-note">Students registered</div>
+        </div>
+        <div class="panel stat">
+          <div class="stat-label">Numbers available</div>
+          <div class="stat-value" id="statAvailable">99</div>
+          <div class="stat-note" id="statAvailableNote">of 99 jersey numbers</div>
+          <div class="progress" aria-hidden="true"><span id="statProgress" style="width:0%"></span></div>
+        </div>
+        <div class="panel stat">
+          <div class="stat-label">Submitted today</div>
+          <div class="stat-value" id="statToday">0</div>
+          <div class="stat-note" id="statWeek">0 in the last 7 days</div>
+        </div>
+        <div class="panel stat">
+          <div class="stat-label">Latest submission</div>
+          <div class="stat-value small" id="statLatest">None yet</div>
+          <div class="stat-note" id="statLatestTime">&nbsp;</div>
+        </div>
+      </section>
+
+      <section class="charts" aria-label="Charts">
+        <div class="panel wide">
+          <h2>Submissions over time</h2>
+          <p class="panel-sub">Forms received per day, last 14 days (WIB)</p>
+          <div id="timeChart"></div>
+        </div>
+        <div class="panel">
+          <h2>Students by class</h2>
+          <p class="panel-sub">Class is optional on the form</p>
+          <div class="donut-wrap" id="classChart"></div>
+        </div>
+        <div class="panel">
+          <h2>Jersey sizes</h2>
+          <p class="panel-sub">Quantity to order per size</p>
+          <div class="bars" id="jerseyChart"></div>
+        </div>
+        <div class="panel">
+          <h2>Pants sizes</h2>
+          <p class="panel-sub">Quantity to order per size</p>
+          <div class="bars" id="pantsChart"></div>
+        </div>
+        <div class="panel">
+          <h2>Recent submissions</h2>
+          <p class="panel-sub">Latest forms received</p>
+          <ul class="recent" id="recentList"></ul>
+        </div>
+      </section>
+
+      <section class="lower">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Jersey numbers</h2>
+              <p class="panel-sub" id="numbersSub">Select a taken number to edit that student.</p>
+            </div>
+            <div class="seg" role="group" aria-label="Number view">
+              <button type="button" data-view="board" aria-pressed="true">Board</button>
+              <button type="button" data-view="kits" aria-pressed="false">Jerseys</button>
+            </div>
+          </div>
+          <div class="board" id="board"></div>
+          <div class="kit-grid" id="kitGrid" hidden></div>
+          <div class="board-legend" id="boardLegend">
+            <span><i style="background:var(--burgundy)"></i>Taken</span>
+            <span><i style="background:var(--gray-50);border:1px solid var(--gray-300)"></i>Available</span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Students</h2>
+          <p class="panel-sub">Select Edit to correct a student's details or move them to another jersey number.</p>
+          <div class="table-tools">
+            <input type="search" id="search" placeholder="Search name, printed name or number" aria-label="Search students" />
+            <select id="classFilter" aria-label="Filter by class">
+              <option value="all">All classes</option>
+              <option value="4">Class 4</option>
+              <option value="5">Class 5</option>
+              <option value="6">Class 6</option>
+              <option value="">Not provided</option>
+            </select>
+            <span class="table-count" id="tableCount"></span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th><button type="button" data-sort="jerseyNumber">Jersey No.</button></th>
+                  <th><button type="button" data-sort="studentName">Student name</button></th>
+                  <th><button type="button" data-sort="nickname">Printed name</button></th>
+                  <th><button type="button" data-sort="class">Class</button></th>
+                  <th><button type="button" data-sort="jerseySize">Jersey</button></th>
+                  <th><button type="button" data-sort="pantsSize">Pants</button></th>
+                  <th><button type="button" data-sort="createdAt">Submitted</button></th>
+                  <th><span class="sr-only">Actions</span></th>
+                </tr>
+              </thead>
+              <tbody id="tableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Edit dialog -->
+  <dialog id="editDialog" aria-labelledby="editTitle">
+    <form id="editForm" novalidate>
+      <div class="dialog-head"><h2 id="editTitle">Edit submission</h2></div>
+      <div class="dialog-body">
+        <div class="field">
+          <label for="editName">Student name</label>
+          <input id="editName" maxlength="120" required />
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="editNickname">Printed name</label>
+            <input id="editNickname" maxlength="14" required style="text-transform:uppercase" />
+          </div>
+          <div class="field">
+            <label for="editNumber">Jersey number</label>
+            <select id="editNumber" required></select>
+          </div>
+          <div class="field">
+            <label for="editJersey">Jersey size</label>
+            <select id="editJersey" required></select>
+          </div>
+          <div class="field">
+            <label for="editPants">Pants size</label>
+            <select id="editPants" required></select>
+          </div>
+          <div class="field">
+            <label for="editClass">Class</label>
+            <select id="editClass">
+              <option value="">Not provided</option>
+              <option value="4">Class 4</option>
+              <option value="5">Class 5</option>
+              <option value="6">Class 6</option>
+            </select>
+          </div>
+        </div>
+        <p class="audit" id="editAudit"></p>
+        <p class="error-text" id="editError" role="alert"></p>
+      </div>
+      <div class="dialog-foot">
+        <button type="button" class="btn link-danger" id="editDelete" style="margin-right:auto">Remove</button>
+        <button type="button" class="btn" data-close>Cancel</button>
+        <button type="submit" class="btn btn-primary" id="editSave">Save changes</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Remove dialog -->
+  <dialog id="deleteDialog" aria-labelledby="deleteTitle">
+    <div class="dialog-head"><h2 id="deleteTitle">Remove submission</h2></div>
+    <div class="dialog-body">
+      <p id="deleteText" style="line-height:1.6"></p>
+      <p class="error-text" id="deleteError" role="alert" style="margin-top:12px"></p>
+    </div>
+    <div class="dialog-foot">
+      <button type="button" class="btn" data-close>Cancel</button>
+      <button type="button" class="btn btn-danger" id="deleteConfirm">Remove and release number</button>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    const SIZES = ['S', 'M', 'L', 'XL', '2XL', '3XL'];
+    const TZ = 'Asia/Jakarta';
+    const $ = id => document.getElementById(id);
+    let submissions = [];
+    let sort = { key: 'jerseyNumber', dir: 1 };
+    let editing = null;
+    let deleting = null;
+    let currentAdmin = null;
+    const isTest = item => item.jerseyNumber === 0;
+    const testTag = item => isTest(item) ? ' <span class="test-tag">Test</span>' : '';
+
+    const esc = value => String(value ?? '').replace(/[&<>"']/g, char => (
+      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]
+    ));
+    const dayKey = date => new Intl.DateTimeFormat('en-CA', { timeZone: TZ }).format(date);
+    const formatDate = iso => iso ? new Intl.DateTimeFormat('en-GB', {
+      timeZone: TZ, day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
+    }).format(new Date(iso)) : '—';
+
+    // Back-of-jersey graphic, self-contained so it also renders in the printed report
+    function jerseySvg(name, number) {
+      const label = String(name || '').toUpperCase();
+      const nameSize = Math.min(17, Math.max(8, 150 / Math.max(label.length, 1) * 1.45));
+      return `<svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Jersey ${esc(label)} ${number}">
+        <path d="M62 10 L20 30 L0 80 L32 94 L42 70 L42 210 L158 210 L158 70 L168 94 L200 80 L180 30 L138 10 C128 24 72 24 62 10 Z" fill="#730b2b" stroke="#52091f" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M4 70 L34 83 M196 70 L166 83" stroke="#e5bc43" stroke-width="5"/>
+        <path d="M62 10 C72 24 128 24 138 10" fill="none" stroke="#e5bc43" stroke-width="6"/>
+        <path d="M42 196 L158 196" stroke="#52091f" stroke-width="2" opacity=".6"/>
+        <text x="100" y="66" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="${nameSize.toFixed(1)}" letter-spacing="1.5" fill="#ffffff">${esc(label)}</text>
+        <text x="100" y="158" text-anchor="middle" font-family="Arial Black, Arial, Helvetica, sans-serif" font-weight="900" font-size="82" fill="#f4d773" stroke="#52091f" stroke-width="2" paint-order="stroke">${number}</text>
+      </svg>`;
+    }
+
+    async function api(path, options = {}) {
+      const response = await fetch(path, {
+        ...options,
+        credentials: 'same-origin',
+        headers: options.body ? { 'Content-Type': 'application/json' } : undefined,
+        signal: AbortSignal.timeout(20000),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (response.status === 401 && path !== '/api/admin/login') {
+        showLogin();
+        throw new Error(data.error || 'Please sign in.');
+      }
+      if (!response.ok) throw new Error(data.error || 'Request failed. Please try again.');
+      return data;
+    }
+
+    function toast(message) {
+      const el = $('toast');
+      el.textContent = message;
+      el.classList.add('on');
+      clearTimeout(toast.timer);
+      toast.timer = setTimeout(() => el.classList.remove('on'), 3000);
+    }
+
+    // ── Auth ───────────────────────────────────────────────────
+    function showLogin() {
+      $('dashView').hidden = true;
+      $('loginView').hidden = false;
+      document.querySelectorAll('dialog[open]').forEach(dialog => dialog.close());
+      $('loginEmail').focus();
+    }
+
+    function showDashboard(admin, emailNotifications) {
+      currentAdmin = admin;
+      $('adminName').textContent = admin.name;
+      $('adminPosition').textContent = admin.position;
+      $('emailNotice').hidden = emailNotifications;
+      $('loginView').hidden = true;
+      $('dashView').hidden = false;
+      loadSubmissions();
+    }
+
+    $('loginForm').addEventListener('submit', async event => {
+      event.preventDefault();
+      $('loginError').textContent = '';
+      const email = $('loginEmail').value.trim();
+      const password = $('loginPassword').value;
+      if (!email || !password) {
+        $('loginError').textContent = 'Enter your email and password.';
+        return;
+      }
+      $('loginButton').disabled = true;
+      $('loginButton').textContent = 'Signing in...';
+      try {
+        await api('/api/admin/login', { method: 'POST', body: JSON.stringify({ email, password }) });
+        $('loginPassword').value = '';
+        const me = await api('/api/admin/me');
+        showDashboard(me.admin, me.emailNotifications);
+      } catch (error) {
+        $('loginError').textContent = error.message;
+      } finally {
+        $('loginButton').disabled = false;
+        $('loginButton').textContent = 'Sign in';
+      }
+    });
+
+    $('logoutButton').addEventListener('click', async () => {
+      await api('/api/admin/logout', { method: 'POST' }).catch(() => {});
+      submissions = [];
+      showLogin();
+    });
+
+    // ── Data ───────────────────────────────────────────────────
+    async function loadSubmissions(quiet) {
+      $('refreshButton').disabled = true;
+      try {
+        const data = await api('/api/admin/submissions');
+        submissions = data.submissions;
+        render();
+        $('lastUpdated').textContent = `Last updated ${new Intl.DateTimeFormat('en-GB', { timeZone: TZ, hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(new Date())} (WIB)`;
+      } catch (error) {
+        if (!quiet) toast(error.message);
+      } finally {
+        $('refreshButton').disabled = false;
+      }
+    }
+
+    function countBy(key, values) {
+      const counts = Object.fromEntries(values.map(value => [value, 0]));
+      submissions.forEach(item => { if (item[key] in counts) counts[item[key]] += 1; });
+      return counts;
+    }
+
+    function render() {
+      renderStats();
+      renderTimeChart();
+      renderBars('jerseyChart', countBy('jerseySize', SIZES), '');
+      renderBars('pantsChart', countBy('pantsSize', SIZES), 'alt');
+      renderClassChart();
+      renderRecent();
+      renderBoard();
+      renderTable();
+    }
+
+    function renderStats() {
+      const total = submissions.filter(item => !isTest(item)).length;
+      const today = dayKey(new Date());
+      const weekAgo = Date.now() - 7 * 86400000;
+      $('statTotal').textContent = total;
+      $('statAvailable').textContent = 99 - total;
+      $('statAvailableNote').textContent = `${total} of 99 numbers taken`;
+      $('statProgress').style.width = `${(total / 99) * 100}%`;
+      $('statToday').textContent = submissions.filter(item => item.createdAt && dayKey(new Date(item.createdAt)) === today).length;
+      $('statWeek').textContent = `${submissions.filter(item => item.createdAt && new Date(item.createdAt) >= weekAgo).length} in the last 7 days`;
+      const latest = [...submissions].filter(item => item.createdAt).sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0];
+      $('statLatest').textContent = latest ? `${latest.studentName} (#${latest.jerseyNumber})` : 'None yet';
+      $('statLatestTime').textContent = latest ? formatDate(latest.createdAt) : '\u00a0';
+    }
+
+    function renderTimeChart() {
+      const days = Array.from({ length: 14 }, (_, index) => {
+        const date = new Date(Date.now() - (13 - index) * 86400000);
+        return { key: dayKey(date), label: new Intl.DateTimeFormat('en-GB', { timeZone: TZ, day: 'numeric', month: 'short' }).format(date), count: 0 };
+      });
+      const lookup = new Map(days.map(day => [day.key, day]));
+      submissions.forEach(item => {
+        if (item.createdAt) {
+          const day = lookup.get(dayKey(new Date(item.createdAt)));
+          if (day) day.count += 1;
+        }
+      });
+      const max = Math.max(4, ...days.map(day => day.count));
+      const width = 700, height = 210, left = 30, bottom = 30, top = 20;
+      const plotHeight = height - bottom - top;
+      const step = (width - left) / days.length;
+      const barWidth = step * 0.6;
+      const ticks = [0, Math.round(max / 2), max];
+      let svg = `<svg class="chart-svg" viewBox="0 0 ${width} ${height}" role="img" aria-label="Bar chart of submissions per day for the last 14 days">`;
+      ticks.forEach(tick => {
+        const y = top + plotHeight - (tick / max) * plotHeight;
+        svg += `<line x1="${left}" x2="${width}" y1="${y}" y2="${y}" stroke="#e5e7eb" stroke-dasharray="${tick ? '4 4' : ''}"/>`;
+        svg += `<text x="${left - 8}" y="${y + 4}" text-anchor="end">${tick}</text>`;
+      });
+      days.forEach((day, index) => {
+        const x = left + index * step + (step - barWidth) / 2;
+        const barHeight = (day.count / max) * plotHeight;
+        const y = top + plotHeight - barHeight;
+        svg += `<rect x="${x}" y="${y}" width="${barWidth}" height="${barHeight}" rx="4" fill="${index === days.length - 1 ? '#e5bc43' : '#730b2b'}"><title>${esc(day.label)}: ${day.count}</title></rect>`;
+        if (day.count) svg += `<text class="value" x="${x + barWidth / 2}" y="${y - 5}" text-anchor="middle">${day.count}</text>`;
+        if (index % 2 === 1 || days.length <= 7) svg += `<text x="${x + barWidth / 2}" y="${height - 10}" text-anchor="middle">${esc(day.label)}</text>`;
+      });
+      $('timeChart').innerHTML = `${svg}</svg>`;
+    }
+
+    function renderBars(id, counts, variant) {
+      const max = Math.max(1, ...Object.values(counts));
+      $(id).innerHTML = Object.entries(counts).map(([size, count]) => `
+        <div class="bar-row">
+          <b>${esc(size)}</b>
+          <div class="bar-track" role="img" aria-label="${esc(size)}: ${count}"><div class="bar-fill ${variant}" style="width:${(count / max) * 100}%"></div></div>
+          <span>${count}</span>
+        </div>`).join('');
+    }
+
+    function renderClassChart() {
+      const groups = [
+        ['Class 4', submissions.filter(item => item.class === '4').length, '#730b2b'],
+        ['Class 5', submissions.filter(item => item.class === '5').length, '#e5bc43'],
+        ['Class 6', submissions.filter(item => item.class === '6').length, '#278552'],
+        ['Not provided', submissions.filter(item => !item.class).length, '#d1d5db'],
+      ];
+      const total = submissions.length;
+      const radius = 15.915, circumference = 100;
+      let offset = 25;
+      let rings = `<circle cx="21" cy="21" r="${radius}" fill="none" stroke="#f3f4f6" stroke-width="6"/>`;
+      if (total) {
+        groups.forEach(([label, count, color]) => {
+          if (!count) return;
+          const portion = (count / total) * circumference;
+          rings += `<circle cx="21" cy="21" r="${radius}" fill="none" stroke="${color}" stroke-width="6" stroke-dasharray="${portion} ${circumference - portion}" stroke-dashoffset="${offset}"><title>${label}: ${count}</title></circle>`;
+          offset -= portion;
+        });
+      }
+      $('classChart').innerHTML = `
+        <svg viewBox="0 0 42 42" role="img" aria-label="Students by class">
+          ${rings}
+          <text x="21" y="22" text-anchor="middle" font-size="8" font-weight="800" fill="#111827">${total}</text>
+          <text x="21" y="28" text-anchor="middle" font-size="3.4" fill="#6b7280">students</text>
+        </svg>
+        <ul class="legend">${groups.map(([label, count, color]) => `<li><i style="background:${color}"></i>${label}<b>${count}</b></li>`).join('')}</ul>`;
+    }
+
+    function renderRecent() {
+      const recent = [...submissions].filter(item => item.createdAt)
+        .sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 6);
+      $('recentList').innerHTML = recent.length
+        ? recent.map(item => `<li><span class="num-badge">${item.jerseyNumber}</span><div><strong>${esc(item.studentName)}</strong><span class="muted">${esc(formatDate(item.createdAt))}</span></div></li>`).join('')
+        : '<li class="muted" style="display:block">No submissions yet.</li>';
+    }
+
+    function renderBoard() {
+      const byNumber = new Map(submissions.map(item => [item.jerseyNumber, item]));
+      $('board').innerHTML = Array.from({ length: 99 }, (_, index) => {
+        const number = index + 1;
+        const item = byNumber.get(number);
+        return item
+          ? `<button type="button" data-edit="${number}" title="#${number}: ${esc(item.studentName)}" aria-label="Number ${number}, ${esc(item.studentName)}. Edit">${number}</button>`
+          : `<span title="#${number}: available">${number}</span>`;
+      }).join('');
+      const sorted = [...submissions].sort((a, b) => a.jerseyNumber - b.jerseyNumber);
+      $('kitGrid').innerHTML = sorted.length
+        ? sorted.map(item => `<button type="button" class="kit" data-edit="${item.jerseyNumber}" aria-label="Edit ${esc(item.studentName)}, number ${item.jerseyNumber}">
+            ${jerseySvg(item.nickname, item.jerseyNumber)}
+            <strong>${esc(item.studentName)}${testTag(item)}</strong>
+            <span>${item.class ? `Class ${esc(item.class)} · ` : ''}Top ${esc(item.jerseySize)} · Pants ${esc(item.pantsSize)}</span>
+          </button>`).join('')
+        : '<p class="empty">No jerseys yet. They will appear here as students submit.</p>';
+    }
+
+    let numbersView = 'board';
+    document.querySelectorAll('[data-view]').forEach(button => button.addEventListener('click', () => {
+      numbersView = button.dataset.view;
+      document.querySelectorAll('[data-view]').forEach(b => b.setAttribute('aria-pressed', String(b === button)));
+      const kits = numbersView === 'kits';
+      $('board').hidden = kits;
+      $('boardLegend').hidden = kits;
+      $('kitGrid').hidden = !kits;
+      $('numbersSub').textContent = kits ? 'Back of each jersey as it will be printed. Select one to edit.' : 'Select a taken number to edit that student.';
+    }));
+
+    function filteredRows() {
+      const query = $('search').value.trim().toLowerCase();
+      const classFilter = $('classFilter').value;
+      return submissions
+        .filter(item => classFilter === 'all' || item.class === classFilter)
+        .filter(item => !query || [item.studentName, item.nickname, String(item.jerseyNumber)].some(value => value.toLowerCase().includes(query)))
+        .sort((a, b) => {
+          const left = a[sort.key] ?? '', right = b[sort.key] ?? '';
+          if (sort.key === 'jerseySize' || sort.key === 'pantsSize') return (SIZES.indexOf(left) - SIZES.indexOf(right)) * sort.dir;
+          return (typeof left === 'number' ? left - right : String(left).localeCompare(String(right))) * sort.dir;
+        });
+    }
+
+    function renderTable() {
+      const rows = filteredRows();
+      $('tableCount').textContent = `${rows.length} of ${submissions.length} students`;
+      document.querySelectorAll('th button').forEach(button => {
+        if (button.dataset.sort === sort.key) {
+          button.setAttribute('aria-sort', sort.dir === 1 ? 'ascending' : 'descending');
+          button.dataset.arrow = sort.dir === 1 ? '▲' : '▼';
+        } else {
+          button.removeAttribute('aria-sort');
+        }
+      });
+      if (!rows.length) {
+        $('tableBody').innerHTML = `<tr><td colspan="9" class="empty">${submissions.length ? 'No students match your search.' : 'No submissions yet. Students will appear here once they submit the form.'}</td></tr>`;
+        return;
+      }
+      $('tableBody').innerHTML = rows.map((item, index) => `
+        <tr>
+          <td class="row-index">${index + 1}</td>
+          <td><span class="num-badge">${item.jerseyNumber}</span></td>
+          <td class="name">${esc(item.studentName)}${testTag(item)}${item.updatedAt ? `<br><span class="edited">Edited ${esc(formatDate(item.updatedAt))} by ${esc(item.updatedBy)}</span>` : ''}</td>
+          <td class="print-name">${esc(item.nickname)}</td>
+          <td>${item.class ? `Class ${esc(item.class)}` : '<span class="muted">—</span>'}</td>
+          <td>${esc(item.jerseySize)}</td>
+          <td>${esc(item.pantsSize)}</td>
+          <td>${esc(formatDate(item.createdAt))}</td>
+          <td><div class="row-actions">
+            <button type="button" class="btn" data-edit="${item.jerseyNumber}">Edit</button>
+            <button type="button" class="btn link-danger" data-delete="${item.jerseyNumber}">Remove</button>
+          </div></td>
+        </tr>`).join('');
+    }
+
+    $('search').addEventListener('input', renderTable);
+    $('classFilter').addEventListener('change', renderTable);
+    document.querySelectorAll('th button').forEach(button => button.addEventListener('click', () => {
+      sort = { key: button.dataset.sort, dir: sort.key === button.dataset.sort ? -sort.dir : 1 };
+      renderTable();
+    }));
+    $('refreshButton').addEventListener('click', () => loadSubmissions());
+    document.addEventListener('click', event => {
+      const edit = event.target.closest('[data-edit]');
+      const remove = event.target.closest('[data-delete]');
+      if (edit) openEdit(Number(edit.dataset.edit));
+      if (remove) openDelete(Number(remove.dataset.delete));
+      if (event.target.closest('[data-close]')) event.target.closest('dialog').close();
+    });
+
+    // ── Edit ───────────────────────────────────────────────────
+    ['editJersey', 'editPants'].forEach(id => {
+      $(id).innerHTML = SIZES.map(size => `<option value="${size}">${size}</option>`).join('');
+    });
+
+    function openEdit(number) {
+      const item = submissions.find(entry => entry.jerseyNumber === number);
+      if (!item) return;
+      editing = item;
+      const taken = new Set(submissions.map(entry => entry.jerseyNumber));
+      const values = Array.from({ length: 99 }, (_, index) => index + 1);
+      if (number === 0) values.unshift(0);
+      $('editNumber').innerHTML = values.map(value => {
+        const unavailable = taken.has(value) && value !== number;
+        return `<option value="${value}" ${unavailable ? 'disabled' : ''}>${value}${value === number ? ' (current)' : unavailable ? ' — Taken' : ''}</option>`;
+      }).join('');
+      $('editTitle').textContent = `Edit #${number} – ${item.studentName}`;
+      $('editName').value = item.studentName;
+      $('editNickname').value = item.nickname;
+      $('editNumber').value = String(number);
+      $('editJersey').value = item.jerseySize;
+      $('editPants').value = item.pantsSize;
+      $('editClass').value = item.class;
+      $('editAudit').textContent = `Submitted ${formatDate(item.createdAt)}${item.updatedAt ? ` · Last edited ${formatDate(item.updatedAt)} by ${item.updatedBy}` : ''}`;
+      $('editError').textContent = '';
+      $('editDialog').showModal();
+      $('editName').focus();
+    }
+
+    $('editForm').addEventListener('submit', async event => {
+      event.preventDefault();
+      const details = {
+        studentName: $('editName').value.trim(),
+        nickname: $('editNickname').value.trim().toUpperCase(),
+        jerseyNumber: Number($('editNumber').value),
+        jerseySize: $('editJersey').value,
+        pantsSize: $('editPants').value,
+        class: $('editClass').value,
+      };
+      if (!details.studentName || !details.nickname) {
+        $('editError').textContent = 'Student name and printed name are required.';
+        return;
+      }
+      $('editSave').disabled = true;
+      $('editSave').textContent = 'Saving...';
+      try {
+        await api(`/api/admin/submissions/${editing.jerseyNumber}`, { method: 'PATCH', body: JSON.stringify(details) });
+        $('editDialog').close();
+        toast(details.jerseyNumber === editing.jerseyNumber
+          ? `Saved changes for ${details.studentName}.`
+          : `${details.studentName} moved from #${editing.jerseyNumber} to #${details.jerseyNumber}.`);
+        await loadSubmissions();
+      } catch (error) {
+        $('editError').textContent = error.message;
+        loadSubmissions(true);
+      } finally {
+        $('editSave').disabled = false;
+        $('editSave').textContent = 'Save changes';
+      }
+    });
+
+    $('editDelete').addEventListener('click', () => {
+      $('editDialog').close();
+      openDelete(editing.jerseyNumber);
+    });
+
+    // ── Remove ─────────────────────────────────────────────────
+    function openDelete(number) {
+      deleting = submissions.find(entry => entry.jerseyNumber === number);
+      if (!deleting) return;
+      $('deleteText').innerHTML = `Remove <strong>${esc(deleting.studentName)}</strong>'s submission? Jersey number <strong>#${number}</strong> will become available for other students. This cannot be undone.`;
+      $('deleteError').textContent = '';
+      $('deleteDialog').showModal();
+    }
+
+    $('deleteConfirm').addEventListener('click', async () => {
+      $('deleteConfirm').disabled = true;
+      try {
+        await api(`/api/admin/submissions/${deleting.jerseyNumber}`, { method: 'DELETE' });
+        $('deleteDialog').close();
+        toast(`Removed ${deleting.studentName}. Number #${deleting.jerseyNumber} is available again.`);
+        await loadSubmissions();
+      } catch (error) {
+        $('deleteError').textContent = error.message;
+      } finally {
+        $('deleteConfirm').disabled = false;
+      }
+    });
+
+    // ── CSV export ─────────────────────────────────────────────
+    $('exportButton').addEventListener('click', () => {
+      const cell = value => {
+        let text = String(value ?? '');
+        if (/^[=+\-@\t\r]/.test(text)) text = `'${text}`;
+        return `"${text.replace(/"/g, '""')}"`;
+      };
+      const header = ['Jersey number', 'Student name', 'Printed name', 'Class', 'Jersey size', 'Pants size', 'Submitted (WIB)', 'Last edited (WIB)', 'Edited by'];
+      const rows = [...submissions].sort((a, b) => a.jerseyNumber - b.jerseyNumber).map(item => [
+        item.jerseyNumber, item.studentName, item.nickname, item.class ? `Class ${item.class}` : '',
+        item.jerseySize, item.pantsSize, item.createdAt ? formatDate(item.createdAt) : '',
+        item.updatedAt ? formatDate(item.updatedAt) : '', item.updatedBy ?? '',
+      ]);
+      const csv = '\ufeff' + [header, ...rows].map(row => row.map(cell).join(',')).join('\r\n');
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+      link.download = `junior-soccer-jerseys-${dayKey(new Date())}.csv`;
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    });
+
+    // ── Printable report ───────────────────────────────────────
+    const menuList = document.querySelector('#reportMenu .menu-list');
+    const toggleMenu = open => {
+      menuList.hidden = !open;
+      $('reportButton').setAttribute('aria-expanded', String(open));
+      if (open) $('reportPdf').focus();
+    };
+    $('reportButton').addEventListener('click', event => { event.stopPropagation(); toggleMenu(menuList.hidden); });
+    document.addEventListener('click', event => { if (!event.target.closest('#reportMenu')) toggleMenu(false); });
+    document.addEventListener('keydown', event => { if (event.key === 'Escape' && !menuList.hidden) { toggleMenu(false); $('reportButton').focus(); } });
+
+    $('reportExcel').addEventListener('click', async () => {
+      toggleMenu(false);
+      toast('Preparing Excel report...');
+      try {
+        const response = await fetch('/api/admin/report.xlsx', { credentials: 'same-origin', signal: AbortSignal.timeout(30000) });
+        if (response.status === 401) { showLogin(); return; }
+        if (!response.ok) throw new Error();
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(await response.blob());
+        link.download = `junior-soccer-jersey-report-${dayKey(new Date())}.xlsx`;
+        link.click();
+        setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+        toast('Excel report downloaded.');
+      } catch {
+        toast('Could not create the Excel report. Please try again.');
+      }
+    });
+
+    $('reportPdf').addEventListener('click', () => {
+      toggleMenu(false);
+      const win = window.open('', '_blank');
+      if (!win) { toast('Allow pop-ups for this site to open the report.'); return; }
+      const rows = [...submissions].sort((a, b) => a.jerseyNumber - b.jerseyNumber);
+      const now = new Date();
+      const generated = new Intl.DateTimeFormat('en-GB', { timeZone: TZ, dateStyle: 'long', timeStyle: 'short' }).format(now);
+      const tops = countBy('jerseySize', SIZES), pants = countBy('pantsSize', SIZES);
+      const classes = ['4', '5', '6'].map(c => [`Class ${c}`, rows.filter(r => r.class === c).length]);
+      classes.push(['Not provided', rows.filter(r => !r.class).length]);
+      const offList = rows.filter(r => !SIZES.includes(r.jerseySize) || !SIZES.includes(r.pantsSize)).length;
+      const sizeRows = SIZES.map(s => `<tr><td>${s}</td><td>${tops[s]}</td><td>${pants[s]}</td></tr>`).join('');
+      const logo = `${location.origin}/images/logo.jpe`;
+      const realCount = rows.filter(r => !isTest(r)).length;
+      const sizeCell = size => SIZES.includes(size) ? esc(size) : `<span class="flag">${esc(size)}</span>`;
+      const topSize = counts => {
+        const [size, n] = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
+        return n ? size : '—';
+      };
+
+      win.document.write(`<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<title>Junior Soccer Jersey Report ${dayKey(now)}</title>
+<style>
+  @page { size: A4; margin: 14mm 12mm 16mm; @bottom-left { content: "BINUS School Simprug · Junior Soccer Jersey Report"; font: 8pt Arial, sans-serif; color: #6b7280; } @bottom-right { content: "Page " counter(page) " of " counter(pages); font: 8pt Arial, sans-serif; color: #6b7280; } }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Segoe UI", Arial, Helvetica, sans-serif; color: #1f2937; background: #eceef1; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .toolbar { position: sticky; top: 0; z-index: 2; display: flex; gap: 10px; justify-content: center; align-items: center; padding: 12px; background: #52091f; color: #fff; font-size: 14px; }
+  .toolbar button { border: 0; border-radius: 6px; padding: 9px 16px; font-weight: 700; cursor: pointer; font-size: 14px; }
+  .toolbar .primary { background: #e5bc43; color: #52091f; }
+  .toolbar .ghost { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.4); }
+  .sheet { width: 210mm; margin: 20px auto; background: #fff; padding: 14mm 12mm; box-shadow: 0 4px 24px rgba(0,0,0,.12); }
+  .head { display: flex; align-items: center; gap: 16px; background: #730b2b; color: #fff; border-radius: 10px; padding: 18px 22px; border-bottom: 5px solid #e5bc43; }
+  .head img { width: 64px; height: 64px; border-radius: 10px; background: #fff; object-fit: contain; padding: 4px; }
+  .head small { display: block; font-size: 10pt; letter-spacing: 1.5px; text-transform: uppercase; color: #f4d773; font-weight: 700; }
+  .head h1 { font-size: 20pt; line-height: 1.15; margin-top: 2px; }
+  .head .meta { margin-left: auto; text-align: right; font-size: 9pt; line-height: 1.6; color: #f3e3e8; }
+  h2 { font-size: 12pt; color: #730b2b; margin: 22px 0 10px; padding-bottom: 6px; border-bottom: 2px solid #e5bc43; text-transform: uppercase; letter-spacing: .8px; }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 18px; }
+  .stat { border: 1px solid #e5e7eb; border-left: 4px solid #730b2b; border-radius: 8px; padding: 10px 12px; }
+  .stat:nth-child(even) { border-left-color: #e5bc43; }
+  .stat b { display: block; font-size: 20pt; color: #730b2b; line-height: 1.1; }
+  .stat span { font-size: 8.5pt; color: #6b7280; text-transform: uppercase; letter-spacing: .5px; }
+  .two { display: grid; grid-template-columns: 1.3fr 1fr; gap: 18px; }
+  table { width: 100%; border-collapse: collapse; font-size: 9.5pt; }
+  th { background: #730b2b; color: #fff; text-align: left; padding: 7px 9px; font-size: 8.5pt; text-transform: uppercase; letter-spacing: .5px; }
+  td { padding: 6px 9px; border-bottom: 1px solid #e5e7eb; }
+  tbody tr:nth-child(even) td { background: #faf6f7; }
+  tfoot td { font-weight: 800; background: #fbf4dc; border-top: 2px solid #e5bc43; }
+  tr { break-inside: avoid; }
+  .num { display: inline-block; min-width: 28px; text-align: center; background: #730b2b; color: #f4d773; font-weight: 800; border-radius: 4px; padding: 2px 5px; }
+  .mono { font-family: Consolas, "Courier New", monospace; font-weight: 700; letter-spacing: .5px; }
+  .muted { color: #9ca3af; }
+  .flag { color: #b42318; font-weight: 800; }
+  .test-tag { display: inline-block !important; margin-left: 5px; padding: 0 5px; border-radius: 3px; background: #fbf4dc; color: #8a6a10 !important; font-size: 7pt !important; font-weight: 800; text-transform: uppercase; vertical-align: 1px; }
+  .note { font-size: 8.5pt; color: #6b7280; margin-top: 6px; }
+  .kits { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .kit { border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px 8px 8px; text-align: center; break-inside: avoid; background: linear-gradient(180deg, #f9fafb, #fff); }
+  .kit svg { width: 100%; max-width: 120px; height: auto; display: block; margin: 0 auto 6px; }
+  .kit strong { display: block; font-size: 9.5pt; }
+  .kit span { display: block; font-size: 8pt; color: #6b7280; margin-top: 2px; }
+  .page-break { break-before: page; }
+  .sign { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 36px; font-size: 9pt; color: #4b5563; break-inside: avoid; }
+  .sign div { border-top: 1px solid #9ca3af; padding-top: 6px; }
+  .empty { padding: 30px; text-align: center; color: #6b7280; border: 1px dashed #d1d5db; border-radius: 8px; }
+  @media print {
+    body { background: #fff; }
+    .toolbar { display: none; }
+    .sheet { width: auto; margin: 0; padding: 0; box-shadow: none; }
+  }
+</style></head><body>
+<div class="toolbar"><span>Use <b>Save as PDF</b> as the destination to download.</span>
+  <button class="primary" onclick="print()">Download PDF / Print</button>
+  <button class="ghost" onclick="close()">Close</button></div>
+<div class="sheet">
+  <header class="head">
+    <img src="${logo}" alt="">
+    <div><small>BINUS School Simprug</small><h1>Junior Soccer<br>Jersey Registration Report</h1></div>
+    <div class="meta">Generated ${esc(generated)} WIB<br>Prepared by ${esc(currentAdmin?.name || '')}<br>${esc(currentAdmin?.position || '')}</div>
+  </header>
+
+  <section class="stats">
+    <div class="stat"><b>${realCount}</b><span>Students registered</span></div>
+    <div class="stat"><b>${99 - realCount}</b><span>Numbers available</span></div>
+    <div class="stat"><b>${topSize(tops)}</b><span>Most common top size</span></div>
+    <div class="stat"><b>${topSize(pants)}</b><span>Most common pants size</span></div>
+  </section>
+
+  <div class="two">
+    <section>
+      <h2>Order summary by size</h2>
+      <table><thead><tr><th>Size</th><th>Tops</th><th>Pants</th></tr></thead>
+        <tbody>${sizeRows}</tbody>
+        <tfoot><tr><td>Total</td><td>${SIZES.reduce((t, s) => t + tops[s], 0)}</td><td>${SIZES.reduce((t, s) => t + pants[s], 0)}</td></tr></tfoot></table>
+      ${offList ? `<p class="note">${offList} submission(s) use a size outside S–3XL and are not counted above. Please confirm with the student.</p>` : ''}
+    </section>
+    <section>
+      <h2>Students by class</h2>
+      <table><thead><tr><th>Class</th><th>Students</th></tr></thead>
+        <tbody>${classes.map(([c, n]) => `<tr><td>${c}</td><td>${n}</td></tr>`).join('')}</tbody></table>
+    </section>
+  </div>
+
+  <h2>Registration details</h2>
+  ${rows.length ? `<table><thead><tr><th>#</th><th>No.</th><th>Student name</th><th>Printed name</th><th>Class</th><th>Top</th><th>Pants</th><th>Submitted (WIB)</th></tr></thead><tbody>
+    ${rows.map((r, i) => `<tr><td class="muted">${i + 1}</td><td><span class="num">${r.jerseyNumber}</span></td><td>${esc(r.studentName)}${testTag(r)}</td><td class="mono">${esc(r.nickname)}</td><td>${r.class ? esc(r.class) : '<span class="muted">—</span>'}</td><td>${sizeCell(r.jerseySize)}</td><td>${sizeCell(r.pantsSize)}</td><td>${esc(formatDate(r.createdAt))}</td></tr>`).join('')}
+  </tbody></table>` : '<p class="empty">No submissions yet.</p>'}
+
+  ${rows.length ? `<section class="page-break">
+    <h2>Jersey print preview (back)</h2>
+    <div class="kits">${rows.map(r => `<div class="kit">${jerseySvg(r.nickname, r.jerseyNumber)}<strong>${esc(r.studentName)}${testTag(r)}</strong><span>${r.class ? `Class ${esc(r.class)} · ` : ''}Top ${esc(r.jerseySize)} · Pants ${esc(r.pantsSize)}</span></div>`).join('')}</div>
+  </section>` : ''}
+
+  <div class="sign"><div>Checked by</div><div>Approved by</div></div>
+</div>
+<script>
+  const img = document.querySelector('.head img');
+  const go = () => setTimeout(() => print(), 300);
+  img.complete ? go() : (img.onload = img.onerror = go);
+<\/script>
+</body></html>`);
+      win.document.close();
+    });
+
+    // ── Startup ────────────────────────────────────────────────
+    setInterval(() => {
+      if (!document.hidden && !$('dashView').hidden && !document.querySelector('dialog[open]')) loadSubmissions(true);
+    }, 30000);
+
+    api('/api/admin/me')
+      .then(me => showDashboard(me.admin, me.emailNotifications))
+      .catch(() => showLogin());
+  </script>
+</body>
+</html>

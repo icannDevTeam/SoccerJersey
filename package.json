@@ -1,0 +1,23 @@
+{
+  "name": "junior-soccer-jersey-form",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node --env-file=.env server.js",
+    "test": "node --test tests/*.test.js",
+    "test:firestore": "node --env-file=.env --test tests/firestore.integration.js",
+    "create-admin": "node --env-file=.env scripts/create-admin.js"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0",
+    "firebase-admin": "^14.5.0",
+    "nodemailer": "^10.1.0"
+  },
+  "overrides": {
+    "uuid": "^11.1.1"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/index.js": {
+      "includeFiles": "{jersey-form.html,admin.html,images/logo.jpe,images/size_chart.png}",
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [{ "source": "/(.*)", "destination": "/api/index" }]
+}

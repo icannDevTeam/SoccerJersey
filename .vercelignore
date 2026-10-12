@@ -1,0 +1,7 @@
+.env
+.env.*
+!.env.example
+*-firebase-adminsdk-*.json
+*service-account*.json
+tests/
+.vscode/
