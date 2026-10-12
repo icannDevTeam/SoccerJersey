@@ -15,12 +15,14 @@ const notifier = createNotifier();
 const secureCookies = process.env.COOKIE_SECURE === 'true' || process.env.NODE_ENV === 'production' || onVercel;
 const SESSION_COOKIE = 'jersey_admin';
 
+// Literal URLs so Vercel's bundler traces and ships these files with the function.
+const formPage = new URL('./jersey-form.html', import.meta.url);
 const staticFiles = new Map([
-  ['/', ['jersey-form.html', 'text/html; charset=utf-8']],
-  ['/jersey-form.html', ['jersey-form.html', 'text/html; charset=utf-8']],
-  ['/admin', ['admin.html', 'text/html; charset=utf-8']],
-  ['/images/logo.jpe', ['images/logo.jpe', 'image/jpeg']],
-  ['/images/size_chart.png', ['images/size_chart.png', 'image/png']],
+  ['/', [formPage, 'text/html; charset=utf-8']],
+  ['/jersey-form.html', [formPage, 'text/html; charset=utf-8']],
+  ['/admin', [new URL('./admin.html', import.meta.url), 'text/html; charset=utf-8']],
+  ['/images/logo.jpe', [new URL('./images/logo.jpe', import.meta.url), 'image/jpeg']],
+  ['/images/size_chart.png', [new URL('./images/size_chart.png', import.meta.url), 'image/png']],
 ]);
 
 const baseHeaders = {
@@ -150,7 +152,7 @@ export async function handler(request, response) {
     }
     const file = staticFiles.get(path);
     if (file && ['GET', 'HEAD'].includes(request.method)) {
-      const contents = await readFile(fileURLToPath(new URL(file[0], import.meta.url)));
+      const contents = await readFile(file[0]);
       response.writeHead(200, {
         'Content-Type': file[1],
         'Cache-Control': path === '/admin' ? 'no-store' : 'no-cache',

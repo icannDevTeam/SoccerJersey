@@ -1,8 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "buildCommand": "",
+  "outputDirectory": "public",
   "functions": {
     "api/index.js": {
-      "includeFiles": "{jersey-form.html,admin.html,images/logo.jpe,images/size_chart.png}",
+      "includeFiles": "{*.html,images/**}",
       "maxDuration": 30
     }
   },
