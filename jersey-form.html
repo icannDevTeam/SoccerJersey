@@ -812,6 +812,7 @@
               </div>
               <p class="form-status" id="review-status" role="alert"></p>
               <div class="review-actions">
+                <button type="button" class="btn-secondary" id="backToEdit">Back to edit</button>
                 <button type="button" class="btn-submit" id="confirmSubmit">Confirm and submit</button>
               </div>
             </div>
@@ -1046,7 +1047,9 @@
       reviewStatus.textContent = '';
       goToStep(2);
     });
-
+    document.getElementById('backToEdit').addEventListener('click', () => {
+      if (!submitting) goToStep(1, 'studentName');
+    });
 
     // ── Step 2: confirm and submit ─────────────────────────────
     confirmButton.addEventListener('click', async () => {
