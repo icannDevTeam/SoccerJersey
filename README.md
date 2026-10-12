@@ -22,6 +22,8 @@ No student names or other personal information are returned by the availability 
 
 The form has three steps: **Fill in details → Review → Submitted**. Nothing is saved until the student selects **Confirm and submit** on the review page. If the number is taken in the meantime, the student is returned to the form with the number field highlighted.
 
+Class (4, 5, or 6) is required. Number availability updates automatically; there is no manual refresh button or number hint. The review page displays the requested details without edit buttons and asks students to check them before confirming.
+
 ## Admin dashboard
 
 Open `/admin`. All admins have the same permissions:

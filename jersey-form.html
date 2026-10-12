@@ -506,6 +506,7 @@
       cursor: pointer;
       padding: 4px;
     }
+    .review-warning p + p { margin-top: 8px; }
     .review-warning {
       margin: 20px 0;
       padding: 12px 14px;
@@ -686,14 +687,15 @@
             <!-- Class -->
             <div class="fg" id="fg-class">
               <label for="classSelect">
-                Class <span class="optional">(optional)</span>
+                Class <span class="req">*</span>
               </label>
-              <select id="classSelect" name="class">
-                <option value="">Not selected</option>
+              <select id="classSelect" name="class" required aria-describedby="e-class">
+                <option value="">Select class</option>
                 <option value="4">Class 4</option>
                 <option value="5">Class 5</option>
                 <option value="6">Class 6</option>
               </select>
+              <span class="err-msg" id="e-class">Please select a class</span>
             </div>
 
             <div class="divider">Sizing</div>
@@ -767,12 +769,9 @@
               <label for="jerseyNum">
                 Jersey number <span class="req">*</span>
               </label>
-              <select id="jerseyNum" name="jerseyNumber" required disabled aria-describedby="number-hint number-status e-num">
+              <select id="jerseyNum" name="jerseyNumber" required disabled aria-describedby="e-num">
                 <option value="">Select number</option>
               </select>
-              <span class="hint" id="number-hint">Taken numbers cannot be selected. Your number is reserved when you submit.</span>
-              <span class="number-status" id="number-status" role="status">Loading available numbers...</span>
-              <button type="button" class="btn-retry" id="refreshNumbers">Refresh numbers</button>
               <span class="err-msg" id="e-num">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                 Please select a jersey number
@@ -792,7 +791,6 @@
         <section class="step-panel" id="step-2" aria-labelledby="review-heading" tabindex="-1" hidden>
           <div class="card-heading">
             <h2 id="review-heading">Review your details</h2>
-            <p>Please check every detail carefully. Select Edit to correct anything.</p>
           </div>
           <div class="review-layout">
             <figure class="jersey-preview" aria-label="Jersey back preview">
@@ -808,10 +806,12 @@
             </figure>
             <div>
               <dl class="review-list" id="review-list"></dl>
-              <p class="review-warning">Check the spelling of the student name and printed name. The printed name will appear on the jersey exactly as shown.</p>
+              <div class="review-warning">
+                <p>Check the details before clicking Confirm and submit.</p>
+                <p>We will process the jersey requested.</p>
+              </div>
               <p class="form-status" id="review-status" role="alert"></p>
               <div class="review-actions">
-                <button type="button" class="btn-secondary" id="backToEdit">Back to edit</button>
                 <button type="button" class="btn-submit" id="confirmSubmit">Confirm and submit</button>
               </div>
             </div>
@@ -855,7 +855,6 @@
     const formStatus = document.getElementById('form-status');
     const reviewStatus = document.getElementById('review-status');
     const confirmButton = document.getElementById('confirmSubmit');
-    const numberStatus = document.getElementById('number-status');
     let numbersReady = false;
     let refreshing = false;
     let submitting = false;
@@ -866,18 +865,17 @@
     async function refreshNumbers() {
       if (refreshing || submitting) return;
       if (pendingSubmission) {
-        numberStatus.textContent = 'Your previous submission is unconfirmed. Retry Confirm and submit with the same details to confirm it.';
+        reviewStatus.textContent = 'Your previous submission is unconfirmed. Retry Confirm and submit with the same details to confirm it.';
         return;
       }
       refreshing = true;
-      document.getElementById('refreshNumbers').disabled = true;
       try {
         const response = await fetch('/api/numbers', { cache: 'no-store', signal: AbortSignal.timeout(15000) });
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || 'Unable to load available numbers.');
         if (!Array.isArray(data.takenNumbers) ||
             data.takenNumbers.some(number => !Number.isInteger(number) || number < 1 || number > 99)) {
-          throw new Error('Invalid availability response. Please refresh the numbers.');
+          throw new Error('Invalid availability response.');
         }
         if (submitting || pendingSubmission) return;
         const taken = new Set(data.takenNumbers);
@@ -893,21 +891,17 @@
           if (currentStep === 2) goToStep(1, 'jerseyNum');
         }
         numbersReady = taken.size < 99;
-        numberStatus.textContent = numbersReady
-          ? `${99 - taken.size} numbers available.`
-          : 'All jersey numbers have been reserved. Please contact the organizer.';
+        formStatus.textContent = numbersReady ? '' : 'All jersey numbers have been reserved. Please contact the organizer.';
       } catch (error) {
         numbersReady = false;
-        numberStatus.textContent = `Unable to check availability. ${error.message} Use Refresh numbers to retry.`;
+        formStatus.textContent = `Unable to check availability. ${error.message} Retrying automatically.`;
       } finally {
         refreshing = false;
         jerseyNumberSelect.disabled = !numbersReady;
         submitButton.disabled = submitting || !numbersReady;
-        document.getElementById('refreshNumbers').disabled = false;
       }
     }
 
-    document.getElementById('refreshNumbers').addEventListener('click', refreshNumbers);
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden) refreshNumbers();
     });
@@ -964,7 +958,7 @@
 
     // ── Live blur validation ───────────────────────────────────
     document.getElementById('studentName').addEventListener('blur', () => mark('fg-name', !val('studentName')));
-    document.getElementById('classSelect').addEventListener('change', () => mark('fg-class', false));
+    document.getElementById('classSelect').addEventListener('change', () => mark('fg-class', !val('classSelect')));
     document.getElementById('jerseySize').addEventListener('change', () => mark('fg-jsize', !val('jerseySize')));
     document.getElementById('pantsSize').addEventListener('change', () => mark('fg-psize', !val('pantsSize')));
     document.getElementById('nickname').addEventListener('blur', () => mark('fg-nick', !val('nickname')));
@@ -996,8 +990,8 @@
       ['jerseyNum', 'Jersey number', details => `#${details.jerseyNumber}`],
     ];
 
-    function renderDetails(list, details, editable) {
-      list.replaceChildren(...reviewFields.map(([fieldId, label, value]) => {
+    function renderDetails(list, details) {
+      list.replaceChildren(...reviewFields.map(([, label, value]) => {
         const row = document.createElement('div');
         row.className = 'review-row';
         const term = document.createElement('dt');
@@ -1005,15 +999,6 @@
         const description = document.createElement('dd');
         description.textContent = value(details);
         row.append(term, description);
-        if (editable) {
-          const edit = document.createElement('button');
-          edit.type = 'button';
-          edit.className = 'btn-link';
-          edit.textContent = 'Edit';
-          edit.setAttribute('aria-label', `Edit ${label.toLowerCase()}`);
-          edit.addEventListener('click', () => goToStep(1, fieldId));
-          row.append(edit);
-        }
         return row;
       }));
     }
@@ -1024,12 +1009,13 @@
       if (submitting) return;
       formStatus.textContent = '';
       if (!numbersReady) {
-        formStatus.textContent = 'Please refresh available numbers before continuing.';
+        formStatus.textContent = 'Available numbers are being checked. Please wait.';
         return;
       }
 
       const checks = [
         ['fg-name',  !val('studentName')],
+        ['fg-class', !['4', '5', '6'].includes(val('classSelect'))],
         ['fg-jsize', !val('jerseySize')],
         ['fg-psize', !val('pantsSize')],
         ['fg-nick',  !val('nickname')],
@@ -1054,14 +1040,13 @@
         nickname: val('nickname').toUpperCase(), jerseyNumber: Number(val('jerseyNum')),
       };
       nickInput.value = reviewDetails.nickname;
-      renderDetails(document.getElementById('review-list'), reviewDetails, true);
+      renderDetails(document.getElementById('review-list'), reviewDetails);
       document.getElementById('preview-name').textContent = reviewDetails.nickname;
       document.getElementById('preview-number').textContent = reviewDetails.jerseyNumber;
       reviewStatus.textContent = '';
       goToStep(2);
     });
 
-    document.getElementById('backToEdit').addEventListener('click', () => goToStep(1, 'studentName'));
 
     // ── Step 2: confirm and submit ─────────────────────────────
     confirmButton.addEventListener('click', async () => {
@@ -1103,7 +1088,7 @@
         const option = Array.from(jerseyNumberSelect.options).find(item => item.value === String(details.jerseyNumber));
         option.disabled = true;
         option.textContent = `${details.jerseyNumber} — Taken`;
-        renderDetails(document.getElementById('success-list'), details, false);
+        renderDetails(document.getElementById('success-list'), details);
         document.getElementById('success-number').textContent = `#${details.jerseyNumber}`;
         goToStep(3);
       } catch (error) {

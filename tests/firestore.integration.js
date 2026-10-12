@@ -11,7 +11,7 @@ test('Firestore atomically reserves numbers, supports retries, and persists deta
   const name = `jerseyTest_${randomUUID()}`;
   const store = createJerseyStore(db, name);
   const body = {
-    studentName: 'Integration Test', class: '', jerseySize: 'M', pantsSize: 'L',
+    studentName: 'Integration Test', class: '4', jerseySize: 'M', pantsSize: 'L',
     nickname: 'TEST', jerseyNumber: 12, submissionId: randomUUID(),
   };
   try {

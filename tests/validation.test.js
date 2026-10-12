@@ -4,17 +4,21 @@ import { randomUUID } from 'node:crypto';
 import { validateSubmission, RequestError } from '../jersey-store.js';
 
 const valid = {
-  studentName: ' Test Student ', class: '', jerseySize: 'M', pantsSize: 'L',
+  studentName: ' Test Student ', class: '4', jerseySize: 'M', pantsSize: 'L',
   nickname: ' sam ', jerseyNumber: 12, submissionId: randomUUID(),
 };
 
-test('normalizes names and permits optional class', () => {
+test('normalizes names and requires a valid class', () => {
   const data = validateSubmission(valid);
   assert.equal(data.studentName, 'Test Student');
   assert.equal(data.nickname, 'SAM');
-  assert.equal(data.class, '');
-  assert.equal(validateSubmission({ ...valid, class: '4' }).class, '4');
-  assert.equal(validateSubmission({ ...valid, class: undefined }).class, '');
+  assert.equal(data.class, '4');
+  for (const classValue of ['4', '5', '6']) {
+    assert.equal(validateSubmission({ ...valid, class: classValue }).class, classValue);
+  }
+  for (const classValue of ['', undefined, null, 4]) {
+    assert.throws(() => validateSubmission({ ...valid, class: classValue }), RequestError);
+  }
 });
 
 test('rejects invalid fields and number boundaries', () => {

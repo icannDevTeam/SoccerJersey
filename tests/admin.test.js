@@ -15,10 +15,10 @@ test('passwords are stored as salted scrypt hashes', async () => {
 
 test('admin edits are validated like student submissions', () => {
   const details = validateDetails({
-    studentName: '  Jane   Doe ', class: '', jerseySize: 'M', pantsSize: 'L', nickname: ' jane ', jerseyNumber: 7,
+    studentName: '  Jane   Doe ', class: '4', jerseySize: 'M', pantsSize: 'L', nickname: ' jane ', jerseyNumber: 7,
   });
   assert.deepEqual(details, {
-    studentName: 'Jane Doe', class: '', jerseySize: 'M', pantsSize: 'L', nickname: 'JANE', jerseyNumber: 7,
+    studentName: 'Jane Doe', class: '4', jerseySize: 'M', pantsSize: 'L', nickname: 'JANE', jerseyNumber: 7,
   });
   assert.throws(() => validateDetails({ ...details, jerseyNumber: 100 }), { status: 400 });
   assert.throws(() => validateDetails({ ...details, nickname: 'A'.repeat(15) }), { status: 400 });
