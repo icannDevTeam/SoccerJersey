@@ -107,7 +107,7 @@ export async function buildExcelReport(submissions, admin) {
   const summary = workbook.addWorksheet('Summary', {
     views: [{ showGridLines: false }],
     pageSetup: { paperSize: 9, orientation: 'portrait', fitToPage: true, fitToWidth: 1, fitToHeight: 0, margins: { left: 0.5, right: 0.5, top: 0.6, bottom: 0.6, header: 0.3, footer: 0.3 } },
-    headerFooter: { oddFooter: '&8BINUS School Simprug · Junior Soccer Jersey Report&R&8Page &P of &N' },
+    headerFooter: { oddFooter: '&L&8BINUS School Simprug · Junior Soccer Jersey Report&C&8Engineered by Mr. Albert · Educational Technology&R&8Page &P of &N' },
   });
   summary.columns = [{ width: 24 }, { width: 16 }, { width: 16 }, { width: 4 }, { width: 22 }, { width: 14 }];
   banner(summary, 6, 'Junior Soccer Jersey Registration Report', subtitle, logoId);
@@ -194,7 +194,7 @@ export async function buildExcelReport(submissions, admin) {
   const detail = workbook.addWorksheet('Registrations', {
     views: [{ state: 'frozen', ySplit: 6, showGridLines: false }],
     pageSetup: { paperSize: 9, orientation: 'landscape', fitToPage: true, fitToWidth: 1, fitToHeight: 0, printTitlesRow: '6:6', margins: { left: 0.4, right: 0.4, top: 0.5, bottom: 0.6, header: 0.3, footer: 0.3 } },
-    headerFooter: { oddFooter: '&8BINUS School Simprug · Junior Soccer Jersey Report&R&8Page &P of &N' },
+    headerFooter: { oddFooter: '&L&8BINUS School Simprug · Junior Soccer Jersey Report&C&8Engineered by Mr. Albert · Educational Technology&R&8Page &P of &N' },
   });
   const columns = [
     ['#', 6], ['Jersey No.', 11], ['Student name', 32], ['Printed name', 18], ['Class', 10],

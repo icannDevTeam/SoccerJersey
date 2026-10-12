@@ -328,6 +328,7 @@
       .grid-2 { grid-template-columns: 1fr; }
       .brand strong { font-size: 15px; }
     }
+    .credit { text-align: center; color: var(--gray-500); font-size: 12px; padding: 28px 0 8px; }
   </style>
 </head>
 <body>
@@ -497,6 +498,7 @@
           </div>
         </div>
       </section>
+      <footer class="credit">Engineered by Mr. Albert &middot; Educational Technology</footer>
     </main>
   </div>
 
@@ -1087,6 +1089,7 @@
   .kit span { display: block; font-size: 8pt; color: #6b7280; margin-top: 2px; }
   .page-break { break-before: page; }
   .sign { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 36px; font-size: 9pt; color: #4b5563; break-inside: avoid; }
+  .credit { margin-top: 24px; text-align: center; font-size: 8pt; color: #9ca3af; }
   .sign div { border-top: 1px solid #9ca3af; padding-top: 6px; }
   .empty { padding: 30px; text-align: center; color: #6b7280; border: 1px dashed #d1d5db; border-radius: 8px; }
   @media print {
@@ -1138,6 +1141,7 @@
   </section>` : ''}
 
   <div class="sign"><div>Checked by</div><div>Approved by</div></div>
+  <p class="credit">Engineered by Mr. Albert &middot; Educational Technology</p>
 </div>
 <script>
   const img = document.querySelector('.head img');
