@@ -307,6 +307,24 @@
     }
     .toast.on { opacity: 1; transform: translate(-50%, 0); }
 
+    /* ───── Form Settings Panel ───── */
+    .settings-panel { margin-bottom: 20px; }
+    .settings-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin: 16px 0 18px; }
+    .toggle-row { display: flex; align-items: center; gap: 12px; padding: 12px 0 4px; }
+    .toggle { position: relative; display: inline-block; width: 44px; height: 24px; flex: none; }
+    .toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .toggle-track { position: absolute; inset: 0; cursor: pointer; background: var(--gray-300); border-radius: 24px; transition: background .2s; }
+    .toggle-track::before { content: ''; position: absolute; height: 18px; width: 18px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: transform .2s; box-shadow: 0 1px 3px rgba(0,0,0,.2); }
+    .toggle input:checked + .toggle-track { background: var(--green); }
+    .toggle input:checked + .toggle-track::before { transform: translateX(20px); }
+    .toggle input:focus-visible + .toggle-track { outline: 3px solid var(--gold); outline-offset: 2px; }
+    .toggle-label { font-weight: 600; font-size: 14px; color: var(--gray-700); }
+    .status-chip { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+    .status-chip.open { background: var(--green-soft); color: var(--green); }
+    .status-chip.closed { background: #fee2e2; color: var(--red); }
+    .config-note { font-size: 12px; color: var(--gray-500); transition: color .2s; }
+    .config-note.saved { color: var(--green); }
+
     @media (max-width: 1100px) {
       .charts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .charts .wide { grid-column: 1 / -1; }
@@ -391,6 +409,45 @@
       <div class="notice" id="emailNotice" hidden>
         Email notifications are not set up yet. New submissions will appear here; emails to Mr. Ivan will start once SMTP is configured on the server.
       </div>
+
+      <section class="panel settings-panel" id="settingsPanel" aria-label="Form settings">
+        <div class="panel-head" style="margin-bottom:0">
+          <div>
+            <h2>Form settings</h2>
+            <p class="panel-sub" style="margin-bottom:0">Control student access and form details</p>
+          </div>
+          <span class="status-chip open" id="formStatusChip">Open</span>
+        </div>
+        <div class="toggle-row">
+          <label class="toggle">
+            <input type="checkbox" id="formOpenToggle" checked />
+            <span class="toggle-track"></span>
+          </label>
+          <span class="toggle-label" id="formToggleLabel">Form is open — students can submit</span>
+        </div>
+        <div class="settings-grid">
+          <div class="field">
+            <label for="configYear">Year</label>
+            <input id="configYear" type="number" min="2020" max="2099" placeholder="e.g. 2026" />
+          </div>
+          <div class="field">
+            <label for="configTitle">Form title</label>
+            <input id="configTitle" type="text" maxlength="100" placeholder="Junior Soccer Jersey Form" />
+          </div>
+          <div class="field">
+            <label for="configSchool">School name</label>
+            <input id="configSchool" type="text" maxlength="100" placeholder="BINUS School Simprug" />
+          </div>
+          <div class="field">
+            <label for="configOrganizer">Organizer name</label>
+            <input id="configOrganizer" type="text" maxlength="80" placeholder="e.g. Mr. Ivan" />
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <button class="btn btn-primary" type="button" id="configSave">Save settings</button>
+          <span class="config-note" id="configNote" aria-live="polite"></span>
+        </div>
+      </section>
 
       <section class="stats" aria-label="Summary">
         <div class="panel stat">
@@ -640,6 +697,7 @@
       $('loginView').hidden = true;
       $('dashView').hidden = false;
       loadSubmissions();
+      loadConfig();
     }
 
     $('loginForm').addEventListener('submit', async event => {
@@ -670,6 +728,68 @@
       await api('/api/admin/logout', { method: 'POST' }).catch(() => {});
       submissions = [];
       showLogin();
+    });
+
+    // ── Form config ────────────────────────────────────────────
+    function applyConfigUI(cfg) {
+      const open = cfg.formOpen !== false;
+      $('formOpenToggle').checked = open;
+      $('formToggleLabel').textContent = open
+        ? 'Form is open — students can submit'
+        : 'Form is closed — submissions are blocked';
+      const chip = $('formStatusChip');
+      chip.textContent = open ? 'Open' : 'Closed';
+      chip.className = 'status-chip ' + (open ? 'open' : 'closed');
+      if (cfg.year) $('configYear').value = cfg.year;
+      if (cfg.formTitle) $('configTitle').value = cfg.formTitle;
+      if (cfg.schoolName) $('configSchool').value = cfg.schoolName;
+      if (cfg.organizerName !== undefined) $('configOrganizer').value = cfg.organizerName;
+    }
+
+    async function loadConfig() {
+      try {
+        const data = await api('/api/admin/config');
+        applyConfigUI(data.config);
+      } catch (error) {
+        toast(error.message);
+      }
+    }
+
+    $('formOpenToggle').addEventListener('change', () => {
+      const open = $('formOpenToggle').checked;
+      $('formToggleLabel').textContent = open
+        ? 'Form is open — students can submit'
+        : 'Form is closed — submissions are blocked';
+      const chip = $('formStatusChip');
+      chip.textContent = open ? 'Open' : 'Closed';
+      chip.className = 'status-chip ' + (open ? 'open' : 'closed');
+    });
+
+    $('configSave').addEventListener('click', async () => {
+      $('configSave').disabled = true;
+      $('configNote').textContent = 'Saving…';
+      $('configNote').className = 'config-note';
+      try {
+        const update = { formOpen: $('formOpenToggle').checked };
+        const year = Number($('configYear').value);
+        if (year >= 2020 && year <= 2099) update.year = year;
+        const title = $('configTitle').value.trim();
+        if (title) update.formTitle = title;
+        const school = $('configSchool').value.trim();
+        if (school) update.schoolName = school;
+        update.organizerName = $('configOrganizer').value.trim();
+        const data = await api('/api/admin/config', { method: 'PATCH', body: JSON.stringify(update) });
+        applyConfigUI(data.config);
+        $('configNote').textContent = 'Saved';
+        $('configNote').className = 'config-note saved';
+        setTimeout(() => { $('configNote').textContent = ''; }, 3000);
+        toast('Settings saved');
+      } catch (error) {
+        $('configNote').textContent = '';
+        toast(error.message);
+      } finally {
+        $('configSave').disabled = false;
+      }
     });
 
     // ── Data ───────────────────────────────────────────────────

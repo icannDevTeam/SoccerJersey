@@ -127,5 +127,44 @@ export function createJerseyStore(db, collectionName = 'juniorSoccerJerseys') {
         transaction.delete(ref);
       });
     },
+    async getConfig() {
+      const doc = await db.collection('formConfig').doc('current').get();
+      if (!doc.exists) return { formOpen: true };
+      const data = doc.data();
+      return {
+        formOpen: data.formOpen !== false,
+        ...(data.year !== undefined && { year: data.year }),
+        ...(data.formTitle && { formTitle: data.formTitle }),
+        ...(data.schoolName && { schoolName: data.schoolName }),
+        ...(data.organizerName !== undefined && { organizerName: data.organizerName }),
+        updatedAt: toIso(data.updatedAt),
+        updatedBy: data.updatedBy ?? null,
+      };
+    },
+    async updateConfig(body, adminEmail) {
+      if (!body || typeof body !== 'object') throw new RequestError(400, 'Invalid config.');
+      const update = {};
+      if (typeof body.formOpen === 'boolean') update.formOpen = body.formOpen;
+      if (Number.isInteger(body.year) && body.year >= 2020 && body.year <= 2099) update.year = body.year;
+      if (typeof body.formTitle === 'string') update.formTitle = body.formTitle.trim().slice(0, 100);
+      if (typeof body.schoolName === 'string') update.schoolName = body.schoolName.trim().slice(0, 100);
+      if (typeof body.organizerName === 'string') update.organizerName = body.organizerName.trim().slice(0, 80);
+      if (!Object.keys(update).length) throw new RequestError(400, 'No valid fields to update.');
+      update.updatedAt = FieldValue.serverTimestamp();
+      update.updatedBy = adminEmail;
+      const ref = db.collection('formConfig').doc('current');
+      await ref.set(update, { merge: true });
+      const doc = await ref.get();
+      const data = doc.data();
+      return {
+        formOpen: data.formOpen !== false,
+        ...(data.year !== undefined && { year: data.year }),
+        ...(data.formTitle && { formTitle: data.formTitle }),
+        ...(data.schoolName && { schoolName: data.schoolName }),
+        ...(data.organizerName !== undefined && { organizerName: data.organizerName }),
+        updatedAt: toIso(data.updatedAt),
+        updatedBy: data.updatedBy ?? null,
+      };
+    },
   };
 }

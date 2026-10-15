@@ -655,7 +655,13 @@
 
     <main class="card">
       <div class="card-top-bar"></div>
-      <div class="card-body">
+      <div class="card-body" id="closedMessage" hidden>
+        <div class="card-heading">
+          <h2>Form is currently closed</h2>
+          <p>Jersey orders are not being accepted at this time. Please check back later or contact the organizer.</p>
+        </div>
+      </div>
+      <div class="card-body" id="formBody">
         <ol class="stepper" aria-label="Form progress">
           <li data-step="1">Fill in details</li>
           <li data-step="2">Review</li>
@@ -846,6 +852,24 @@
   </dialog>
 
   <script>
+    async function checkFormConfig() {
+      try {
+        const response = await fetch('/api/config', { cache: 'no-store', signal: AbortSignal.timeout(10000) });
+        const data = await response.json();
+        const cfg = data.config || {};
+        if (cfg.formOpen === false) {
+          document.getElementById('formBody').hidden = true;
+          document.getElementById('closedMessage').hidden = false;
+          return false;
+        }
+        if (cfg.formTitle) document.querySelector('.hd h1').textContent = cfg.formTitle;
+        if (cfg.schoolName) document.querySelector('.school').textContent = cfg.schoolName;
+      } catch {
+        // fail open — don't block the form if config can't be fetched
+      }
+      return true;
+    }
+
     const jerseyNumberSelect = document.getElementById('jerseyNum');
     jerseyNumberSelect.append(...Array.from({ length: 99 }, (_, index) => {
       const number = String(index + 1);
@@ -1120,7 +1144,7 @@
 
     document.querySelectorAll('.stepper li')[0].classList.add('current');
     document.querySelectorAll('.stepper li')[0].setAttribute('aria-current', 'step');
-    refreshNumbers();
+    checkFormConfig().then(open => { if (open) refreshNumbers(); });
   </script>
 </body>
 </html>

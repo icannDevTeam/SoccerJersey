@@ -131,6 +131,12 @@ async function handleAdmin(request, response, path) {
     await store.remove(match[1]);
     return json(response, 200, { ok: true });
   }
+  if (path === '/api/admin/config' && method === 'GET') {
+    return json(response, 200, { config: await store.getConfig() });
+  }
+  if (path === '/api/admin/config' && method === 'PATCH') {
+    return json(response, 200, { config: await store.updateConfig(await readBody(request), admin.email) });
+  }
   return json(response, 404, { error: 'Not found.' });
 }
 
@@ -141,7 +147,14 @@ export async function handler(request, response) {
     if (path === '/api/numbers' && request.method === 'GET') {
       return json(response, 200, { takenNumbers: await store.takenNumbers() });
     }
+    if (path === '/api/config' && request.method === 'GET') {
+      return json(response, 200, { config: await store.getConfig() });
+    }
     if (path === '/api/submissions' && request.method === 'POST') {
+      const config = await store.getConfig();
+      if (config.formOpen === false) {
+        return json(response, 403, { error: 'The form is currently closed. Please try again later.' });
+      }
       const result = await store.submit(await readBody(request));
       if (result.created) {
         const sending = notifier.submission(result.details).catch(error => console.error('Email notification failed:', error.code ?? error.name));
