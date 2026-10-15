@@ -471,6 +471,7 @@
             <input type="search" id="search" placeholder="Search name, printed name or number" aria-label="Search students" />
             <select id="classFilter" aria-label="Filter by class">
               <option value="all">All classes</option>
+              <option value="3">Class 3</option>
               <option value="4">Class 4</option>
               <option value="5">Class 5</option>
               <option value="6">Class 6</option>
@@ -532,6 +533,7 @@
             <label for="editClass">Class</label>
             <select id="editClass" required>
               <option value="">Not provided</option>
+              <option value="3">Class 3</option>
               <option value="4">Class 4</option>
               <option value="5">Class 5</option>
               <option value="6">Class 6</option>
@@ -764,6 +766,7 @@
 
     function renderClassChart() {
       const groups = [
+        ['Class 3', submissions.filter(item => item.class === '3').length, '#1a5fa8'],
         ['Class 4', submissions.filter(item => item.class === '4').length, '#730b2b'],
         ['Class 5', submissions.filter(item => item.class === '5').length, '#e5bc43'],
         ['Class 6', submissions.filter(item => item.class === '6').length, '#278552'],
@@ -1035,7 +1038,7 @@
       const now = new Date();
       const generated = new Intl.DateTimeFormat('en-GB', { timeZone: TZ, dateStyle: 'long', timeStyle: 'short' }).format(now);
       const tops = countBy('jerseySize', SIZES), pants = countBy('pantsSize', SIZES);
-      const classes = ['4', '5', '6'].map(c => [`Class ${c}`, rows.filter(r => r.class === c).length]);
+      const classes = ['3', '4', '5', '6'].map(c => [`Class ${c}`, rows.filter(r => r.class === c).length]);
       classes.push(['Not provided', rows.filter(r => !r.class).length]);
       const offList = rows.filter(r => !SIZES.includes(r.jerseySize) || !SIZES.includes(r.pantsSize)).length;
       const sizeRows = SIZES.map(s => `<tr><td>${s}</td><td>${tops[s]}</td><td>${pants[s]}</td></tr>`).join('');

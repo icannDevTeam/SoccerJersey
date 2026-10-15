@@ -27,8 +27,8 @@ export function validateDetails(body, { allowTestNumber = false } = {}) {
   if (!nickname || nickname.length > 14) {
     throw new RequestError(400, 'Enter a printed name of up to 14 characters.');
   }
-  if (!['4', '5', '6'].includes(classValue)) {
-    throw new RequestError(400, 'Select a class: 4, 5, or 6.');
+  if (!['3', '4', '5', '6'].includes(classValue)) {
+    throw new RequestError(400, 'Select a class: 3, 4, 5, or 6.');
   }
   if (!sizes.has(body.jerseySize) || !sizes.has(body.pantsSize)) {
     throw new RequestError(400, 'Select valid jersey and pants sizes.');

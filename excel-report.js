@@ -172,7 +172,7 @@ export async function buildExcelReport(submissions, admin) {
     cell.alignment = { vertical: 'middle', indent: 1 };
     cell.border = { ...box, bottom: { style: 'medium', color: { argb: GOLD } } };
   });
-  [['Class 4', '4'], ['Class 5', '5'], ['Class 6', '6'], ['Not provided', '']].forEach(([label, value], i) => {
+  [['Class 3', '3'], ['Class 4', '4'], ['Class 5', '5'], ['Class 6', '6'], ['Not provided', '']].forEach(([label, value], i) => {
     const row = summary.getRow(13 + i);
     row.getCell(5).value = label;
     row.getCell(6).value = rows.filter(r => (r.class ?? '') === value).length;

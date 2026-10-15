@@ -691,6 +691,7 @@
               </label>
               <select id="classSelect" name="class" required aria-describedby="e-class">
                 <option value="">Select class</option>
+                <option value="3">Class 3</option>
                 <option value="4">Class 4</option>
                 <option value="5">Class 5</option>
                 <option value="6">Class 6</option>
@@ -1016,7 +1017,7 @@
 
       const checks = [
         ['fg-name',  !val('studentName')],
-        ['fg-class', !['4', '5', '6'].includes(val('classSelect'))],
+        ['fg-class', !['3', '4', '5', '6'].includes(val('classSelect'))],
         ['fg-jsize', !val('jerseySize')],
         ['fg-psize', !val('pantsSize')],
         ['fg-nick',  !val('nickname')],

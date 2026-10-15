@@ -13,7 +13,7 @@ test('normalizes names and requires a valid class', () => {
   assert.equal(data.studentName, 'Test Student');
   assert.equal(data.nickname, 'SAM');
   assert.equal(data.class, '4');
-  for (const classValue of ['4', '5', '6']) {
+  for (const classValue of ['3', '4', '5', '6']) {
     assert.equal(validateSubmission({ ...valid, class: classValue }).class, classValue);
   }
   for (const classValue of ['', undefined, null, 4]) {
