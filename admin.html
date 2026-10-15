@@ -378,10 +378,6 @@
           <small>BINUS School Simprug</small>
           <strong>Junior Soccer Jersey Admin</strong>
         </div>
-        <div class="who">
-          <strong id="adminName"></strong>
-          <span id="adminPosition"></span>
-        </div>
         <button class="btn" type="button" id="logoutButton">Sign out</button>
       </div>
     </header>
@@ -691,8 +687,6 @@
 
     function showDashboard(admin, emailNotifications) {
       currentAdmin = admin;
-      $('adminName').textContent = admin.name;
-      $('adminPosition').textContent = admin.position;
       $('emailNotice').hidden = emailNotifications;
       $('loginView').hidden = true;
       $('dashView').hidden = false;
